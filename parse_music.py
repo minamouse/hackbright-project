@@ -55,7 +55,7 @@ def to_scale_degrees(piece):
         goal_note = note.Note('A')
 
     else:
-        raise Exception('You should not be inputting music is neither major nor minor.')
+        raise Exception('Invalid music input: piece should be either major or minor.')
 
     transpose_intvl = interval.notesToInterval(note.Note(key_note_str), goal_note)
     transposed_piece = piece.transpose(transpose_intvl)
