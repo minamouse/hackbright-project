@@ -1,4 +1,5 @@
 from music21 import stream, note, midi, interval
+from music21.pitch import PitchException
 
 
 def parse_melody(melody):
@@ -10,15 +11,18 @@ def parse_melody(melody):
         <class 'music21.stream.Stream'>
 
         >>> type(parse_melody("G4 Rest D4 G4 Rest D4 G4 D4 G4 B4 D5"))
-
+        <class 'music21.stream.Stream'>
     """
     piece = stream.Stream()
 
     for item in melody.split():
-        piece.append(note.Note(item))
+        try:
+            piece.append(note.Note(item))
+        except PitchException:
+            piece.append(note.Rest(item))
 
-    st = midi.realtime.StreamPlayer(piece)
-    st.play()
+    # st = midi.realtime.StreamPlayer(piece)
+    # st.play()
 
     return piece
 
