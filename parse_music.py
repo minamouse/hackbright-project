@@ -9,6 +9,7 @@ def markov(data):
     """
 
     note_dict = pickle.load(open('notes.p', 'rb'))
+
     for key, value in data.values():
         if key and value:
             if key in note_dict:
@@ -176,6 +177,9 @@ def create_pickled_file():
     """ Use this function to create a pickle file for the sample corpus.
     """
 
+    # whether or not you have a notes.p file, this will add only an empty
+    # dictionary to it. This is useful for initializing the pickle file later, \
+    # but overwrites anything you might already have in your file so be careful!
     pickle.dump({}, open('notes.p', 'wb'))
     return parse_corpus()
 
