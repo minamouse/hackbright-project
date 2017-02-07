@@ -65,7 +65,7 @@ def process_piece(piece):
     for example:
         >>> piece = to_scale_degrees(corpus.parse('demos/chorale_with_parallels.mxl'))
         >>> process_piece(piece)[0]
-        ('E', set(['A', 'C', 'E']))
+        ('E', set(['A', 'C']))
     """
 
     # removes stream objects that don't have notes -- textboxes or metadata
@@ -80,20 +80,32 @@ def process_piece(piece):
     melody_measures = [m for m in melody if type(m) == stream.Measure]
     measures = [m for m in piece if type(m) == stream.Measure]
 
-    all_measures = zip(melody_measures, measures)
-    all_combinations = []
-    for mel_meas, chord_meas in all_measures:
-        # get the note names from the melody and chord elements
-        melody_elements = [el.name for el in mel_meas if type(el) in [note.Note, note.Rest]]
-        accomp_elements = []
-        for el in chord_meas:
-            if type(el) == chord.Chord:
-                note_names = [n.name for n in el.pitches]
-                note_names = set(note_names)
-                accomp_elements.append(note_names)
-        all_combinations.extend(zip(melody_elements, accomp_elements))
+    comb_dict = {}
 
-    return all_combinations
+    for m in melody_measures:
+        m.transferOffsetToElements()
+
+        for n in m:
+            if type(n) == note.Note:
+                comb_dict[n.offset] = (n.name, [])
+            elif type(n) == note.Rest:
+                comb_dict[n.offset] = ('Rest', [])
+
+    for m in measures:
+        m.transferOffsetToElements()
+
+        for c in m:
+            if type(c) == chord.Chord:
+                notes = [n.name for n in c.pitches]
+                if c.offset in comb_dict:
+                    mel = comb_dict[c.offset][0]
+                    if mel in notes:
+                        notes.remove(mel)
+                    comb_dict[c.offset] = (mel, set(notes))
+                else:
+                    comb_dict[c.offset] = (None, set(notes))
+
+    return comb_dict
 
 
 def parse_corpus():
@@ -104,7 +116,6 @@ def parse_corpus():
     """
 
     pieces = corpus.getComposer('bach')
-    print pieces
     numbers = range(253, 438)
     numbers = [str(n) for n in numbers]
     for piece in pieces:
