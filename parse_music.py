@@ -1,7 +1,48 @@
 from music21 import stream, note, interval, corpus, chord, midi
 from music21.pitch import PitchException
-from markov import markov, add_chords
+from random import choice
 import pickle
+
+
+def markov(data):
+    """ Add to pickled version of markov-chain-like dictionary taken from song data.
+    """
+
+    note_dict = pickle.load(open('notes.p', 'rb'))
+    for key, value in data.values():
+        if key and value:
+            if key in note_dict:
+                note_dict[key].append(value)
+            else:
+                note_dict[key] = [value]
+
+    pickle.dump(note_dict, open('notes.p', 'wb'))
+
+
+def add_chords(melody, note_dict):
+    """ Create chords based on likelihood and add them to the piece.
+
+    for example:
+
+        >>> melody = parse_melody("E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4 D4 D4")
+        >>> type(add_chords(melody, {'E4': set(['E4', 'F4', 'G4'])}))
+        <class 'music21.stream.Stream'>
+    """
+
+    accomp = stream.Part()
+
+    for nnote in melody:
+        if nnote.name in note_dict:
+            new_chord = list(choice(note_dict[nnote.name]))
+            c = chord.Chord([n + '3' for n in new_chord])
+        else:
+            c = note.Rest()
+        accomp.append(c)
+
+    piece = stream.Stream()
+    piece.append(melody)
+    piece.append(accomp)
+    return piece
 
 
 def parse_melody(melody):
@@ -131,17 +172,24 @@ def parse_corpus():
             markov(note_dict)
 
 
-# parsed_input = parse_melody("D4 F4 G4 A4 B-4 A4 G4 E4 C4 D4 E4 F4 D4 D4")
-# melody = to_scale_degrees(parsed_input)
+def create_pickled_file():
+    """ Use this function to create a pickle file for the sample corpus.
+    """
 
-pickle.dump({}, open('notes.p', 'wb'))
-complete_dict = parse_corpus()
+    pickle.dump({}, open('notes.p', 'wb'))
+    return parse_corpus()
 
-# complete_dict = pickle.load(open('notes.p', 'rb'))
 
-# new_song = add_chords(melody, complete_dict)
-# st = midi.realtime.StreamPlayer(new_song)
-# st.play()
+def sample_song(melody):
+    """ Use this function to add and play accompaniment to a melody.
+    """
+    parsed_input = parse_melody(melody)
+    melody = to_scale_degrees(parsed_input)
+    complete_dict = pickle.load(open('notes.p', 'rb'))
+
+    new_song = add_chords(melody, complete_dict)
+    st = midi.realtime.StreamPlayer(new_song)
+    st.play()
 
 
 if __name__ == "__main__":
