@@ -1,4 +1,4 @@
-from music21 import stream, note, midi, interval
+from music21 import stream, note, interval, corpus, chord
 from music21.pitch import PitchException
 
 
@@ -20,9 +20,6 @@ def parse_melody(melody):
             piece.append(note.Note(item))
         except PitchException:
             piece.append(note.Rest(item))
-
-    # st = midi.realtime.StreamPlayer(piece)
-    # st.play()
 
     return piece
 
@@ -60,6 +57,60 @@ def to_scale_degrees(piece):
     transpose_intvl = interval.notesToInterval(note.Note(key_note_str), goal_note)
     transposed_piece = piece.transpose(transpose_intvl)
     return transposed_piece
+
+
+def process_piece(piece):
+    """ Given a piece, does the necessary processing to prepare it for ML.
+
+    for example:
+        >>> piece = to_scale_degrees(corpus.parse('demos/chorale_with_parallels.mxl'))
+        >>> process_piece(piece)[0]
+        ('E', set(['A', 'C', 'E']))
+    """
+
+    # removes stream objects that don't have notes -- textboxes or metadata
+    for element in piece:
+        if type(element) != stream.Part:
+            piece.remove(element)
+
+    melody = piece.pop(0)  # for now, the melody will always be in the top part
+    piece = piece.chordify()
+
+    # get all the measure elements
+    melody_measures = [m for m in melody if type(m) == stream.Measure]
+    measures = [m for m in piece if type(m) == stream.Measure]
+
+    all_measures = zip(melody_measures, measures)
+    all_combinations = []
+    for mel_meas, chord_meas in all_measures:
+        # get the note names from the melody and chord elements
+        melody_elements = [el.name for el in mel_meas if type(el) in [note.Note, note.Rest]]
+        accomp_elements = []
+        for el in chord_meas:
+            if type(el) == chord.Chord:
+                note_names = [n.name for n in el.pitches]
+                note_names = set(note_names)
+                accomp_elements.append(note_names)
+        all_combinations.extend(zip(melody_elements, accomp_elements))
+
+    return all_combinations
+
+
+def parse_corpus():
+    """ Get all the pieces from the music21 corpus of Bach pieces.
+
+    This function will be replaced later, because the corpus here is too small
+    to be ideal for machine learning.
+    """
+
+    pieces = corpus.getComposer('bach')
+    print pieces
+    numbers = range(253, 438)
+    numbers = [str(n) for n in numbers]
+    for piece in pieces:
+        if piece[-7:-4] in numbers:
+            piece = to_scale_degrees(corpus.parse(piece))
+            process_piece(piece)
 
 
 if __name__ == "__main__":
