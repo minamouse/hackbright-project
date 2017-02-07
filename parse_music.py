@@ -1,5 +1,7 @@
-from music21 import stream, note, interval, corpus, chord
+from music21 import stream, note, interval, corpus, chord, midi
 from music21.pitch import PitchException
+from markov import markov, add_chords
+import pickle
 
 
 def parse_melody(melody):
@@ -115,13 +117,31 @@ def parse_corpus():
     to be ideal for machine learning.
     """
 
+    print '*' * 20
+    print 'parsing corpus'
     pieces = corpus.getComposer('bach')
     numbers = range(253, 438)
     numbers = [str(n) for n in numbers]
     for piece in pieces:
         if piece[-7:-4] in numbers:
+            print '*' * 10
+            print 'parsing piece ' + piece[-7:-4]
             piece = to_scale_degrees(corpus.parse(piece))
-            process_piece(piece)
+            note_dict = process_piece(piece)
+            markov(note_dict)
+
+
+# parsed_input = parse_melody("D4 F4 G4 A4 B-4 A4 G4 E4 C4 D4 E4 F4 D4 D4")
+# melody = to_scale_degrees(parsed_input)
+
+pickle.dump({}, open('notes.p', 'wb'))
+complete_dict = parse_corpus()
+
+# complete_dict = pickle.load(open('notes.p', 'rb'))
+
+# new_song = add_chords(melody, complete_dict)
+# st = midi.realtime.StreamPlayer(new_song)
+# st.play()
 
 
 if __name__ == "__main__":
