@@ -8,12 +8,12 @@ def parse_melody(melody):
     for example:
 
         >>> type(parse_melody("E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4 D4 D4"))
-        <class 'music21.stream.Stream'>
+        <class 'music21.stream.Part'>
 
         >>> type(parse_melody("G4 Rest D4 G4 Rest D4 G4 D4 G4 B4 D5"))
-        <class 'music21.stream.Stream'>
+        <class 'music21.stream.Part'>
     """
-    piece = stream.Stream()
+    piece = stream.Part()
 
     for item in melody.split():
         try:
