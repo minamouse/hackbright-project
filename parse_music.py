@@ -2,6 +2,7 @@ from music21 import stream, note, interval, corpus, chord, midi
 from music21.pitch import PitchException
 from random import choice
 import pickle
+from pprint import pprint as pp
 
 
 def markov(data):
@@ -21,21 +22,22 @@ def markov(data):
 
 
 def add_chords(melody, note_dict):
-    """ Create chords based on likelihood and add them to the piece.
+    # """ Create chords based on likelihood and add them to the piece.
 
-    for example:
+    # for example:
 
-        >>> melody = parse_melody("E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4 D4 D4")
-        >>> type(add_chords(melody, {'E4': set(['E4', 'F4', 'G4'])}))
-        <class 'music21.stream.Stream'>
-    """
+    #     >>> melody = parse_melody("E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4 D4 D4")
+    #     >>> type(add_chords(melody, {'E4': set(['E4', 'F4', 'G4'])}))
+    #     <class 'music21.stream.Stream'>
+    # """
 
     accomp = stream.Part()
 
     for nnote in melody:
-        if nnote.name in note_dict:
-            new_chord = list(choice(note_dict[nnote.name]))
-            c = chord.Chord([n + '3' for n in new_chord])
+        if nnote.nameWithOctave in note_dict:
+            new_chord = list(choice(note_dict[nnote.nameWithOctave]))
+            # c = chord.Chord([n + '3' for n in new_chord])
+            c = chord.Chord(new_chord)
         else:
             c = note.Rest()
         accomp.append(c)
@@ -131,7 +133,7 @@ def process_piece(piece):
 
         for n in m:
             if type(n) == note.Note:
-                comb_dict[n.offset] = (n.name, [])
+                comb_dict[n.offset] = (n.nameWithOctave, [])
             elif type(n) == note.Rest:
                 comb_dict[n.offset] = ('Rest', [])
 
@@ -140,7 +142,7 @@ def process_piece(piece):
 
         for c in m:
             if type(c) == chord.Chord:
-                notes = [n.name for n in c.pitches]
+                notes = [n.nameWithOctave for n in c.pitches]
                 if c.offset in comb_dict:
                     mel = comb_dict[c.offset][0]
                     if mel in notes:
@@ -190,10 +192,13 @@ def sample_song(melody):
     parsed_input = parse_melody(melody)
     melody = to_scale_degrees(parsed_input)
     complete_dict = pickle.load(open('notes.p', 'rb'))
-
     new_song = add_chords(melody, complete_dict)
-    st = midi.realtime.StreamPlayer(new_song)
-    st.play()
+    # st = midi.realtime.StreamPlayer(new_song)
+    # st.play()
+    mf = midi.translate.streamToMidiFile(new_song)
+    mf.open('song.mid', 'wb')
+    mf.write()
+    mf.close()
 
 
 if __name__ == "__main__":

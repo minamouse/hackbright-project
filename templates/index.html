@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h1>Hello</h1>
+<script src="./js/MIDI/AudioDetect.js" type="text/javascript"></script>
+<script src="./js/MIDI/LoadPlugin.js" type="text/javascript"></script>
+<script src="./js/MIDI/Plugin.js" type="text/javascript"></script>
+<script src="./js/MIDI/Player.js" type="text/javascript"></script>
+<script src="./js/Widgets/Loader.js" type="text/javascript"></script>
+<script src="./js/Window/Event.js" type="text/javascript"></script>
+<script src="./js/Window/DOMLoader.XMLHttp.js" type="text/javascript"></script>
+<!-- jasmid package -->
+<script src="./inc/jasmid/stream.js"></script>
+<script src="./inc/jasmid/midifile.js"></script>
+<script src="./inc/jasmid/replayer.js"></script>
+<!-- extras -->
+<script src="./inc/Base64.js" type="text/javascript"></script>
+<script src="./inc/base64binary.js" type="text/javascript"></script>
+<script>
+
+    MIDI.loadPlugin({
+        callback: function() {
+            MIDI.Player.loadFile("song.mid", MIDI.Player.start);
+        }
+    });
+
+    // MIDI.Player.loadFile("file.mid", callback);
+
+    // MIDI.Player.start()
+
+    // MIDI.Player.pause();
+
+    // MIDI.Player.stop();
+</script>
+
+{% endblock %}
