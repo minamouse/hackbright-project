@@ -7,7 +7,7 @@
     <button class="btn btn-sm btn-default" id='mel_submit' type="submit">Submit</button>
 </form>
 
-<audio id='audio' src='static/song.wav'></audio>
+<audio id='audio' src=''></audio>
 
 <button class='b' id='play' type="button" hidden>Play Audio</button>
 <button class='b' id='pause' type="button" hidden>Pause Audio</button>
@@ -32,6 +32,9 @@ $('#mel_submit').on('click', function(evt){
     melody = $('#melody').val();
     console.log(melody);
     $.post('/process_song', {'melody': melody}, function(){
+
+        source = 'static/song.wav?random=' + new Date().getTime();
+        $('#audio').attr('src', source);
         $('.b').attr('hidden', false);
     });
 });
