@@ -2,7 +2,7 @@ from music21 import stream, note, interval, corpus, chord, midi
 from music21.pitch import PitchException
 from random import choice
 import pickle
-from pprint import pprint as pp
+import subprocess
 
 
 def markov(data):
@@ -189,6 +189,8 @@ def create_pickled_file():
 def sample_song(melody):
     """ Use this function to add and play accompaniment to a melody.
     """
+    subprocess.call(['rm music/song.mid'], shell=True)
+    subprocess.call(['rm music/song.wav'], shell=True)
     parsed_input = parse_melody(melody)
     melody = to_scale_degrees(parsed_input)
     complete_dict = pickle.load(open('notes.p', 'rb'))
@@ -196,10 +198,11 @@ def sample_song(melody):
     # st = midi.realtime.StreamPlayer(new_song)
     # st.play()
     mf = midi.translate.streamToMidiFile(new_song)
-    mf.open('song.mid', 'wb')
+    mf.open('music/song.mid', 'wb')
     mf.write()
     mf.close()
-
+    subprocess.call(['timidity music/song.mid -Ow -o music/song.wav'], shell=True)
+    return True
 
 if __name__ == "__main__":
     import doctest

@@ -1,5 +1,6 @@
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, request, jsonify
 import os
+from parse_music import sample_song
 
 app = Flask(__name__)
 app.secret_key = os.environ['SECRET_KEY']
@@ -27,6 +28,15 @@ def profile():
 def logout():
 
     return redirect('index.html')
+
+
+@app.route('/process_song', methods=['POST'])
+def song():
+
+    melody = request.form.get('melody')
+    sample_song(melody)
+    return jsonify({})
+
 
 if __name__ == '__main__':
 
