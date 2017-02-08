@@ -2,36 +2,40 @@
 
 {% block body %}
 
-<h1>Hello</h1>
-<script src="./js/MIDI/AudioDetect.js" type="text/javascript"></script>
-<script src="./js/MIDI/LoadPlugin.js" type="text/javascript"></script>
-<script src="./js/MIDI/Plugin.js" type="text/javascript"></script>
-<script src="./js/MIDI/Player.js" type="text/javascript"></script>
-<script src="./js/Widgets/Loader.js" type="text/javascript"></script>
-<script src="./js/Window/Event.js" type="text/javascript"></script>
-<script src="./js/Window/DOMLoader.XMLHttp.js" type="text/javascript"></script>
-<!-- jasmid package -->
-<script src="./inc/jasmid/stream.js"></script>
-<script src="./inc/jasmid/midifile.js"></script>
-<script src="./inc/jasmid/replayer.js"></script>
-<!-- extras -->
-<script src="./inc/Base64.js" type="text/javascript"></script>
-<script src="./inc/base64binary.js" type="text/javascript"></script>
+<form action='/#' id='melody-input' method='POST'>
+    <input type='text' name='text' id='melody'>
+    <button class="btn btn-sm btn-default" id='mel_submit' type="submit">Submit</button>
+</form>
+
+<audio id='audio' src='music/song.wav'></audio>
+
+<button class='b' id='play' type="button" hidden>Play Audio</button>
+<button class='b' id='pause' type="button" hidden>Pause Audio</button>
+
 <script>
 
-    MIDI.loadPlugin({
-        callback: function() {
-            MIDI.Player.loadFile("song.mid", MIDI.Player.start);
-        }
+// var x = $('#audio');
+var x = document.getElementById('audio');
+
+$('#play').on('click', function() {
+    x.load();
+    x.play();
+});
+
+$('#pause').on('click', function() { 
+    x.pause();
+});
+
+
+$('#mel_submit').on('click', function(evt){
+    evt.preventDefault();
+    $('.b').attr('hidden', true);
+    melody = $('#melody').val();
+    console.log(melody);
+    $.post('/process_song', {'melody': melody}, function(){
+        $('.b').attr('hidden', false);
     });
+});
 
-    // MIDI.Player.loadFile("file.mid", callback);
-
-    // MIDI.Player.start()
-
-    // MIDI.Player.pause();
-
-    // MIDI.Player.stop();
 </script>
-
 {% endblock %}
