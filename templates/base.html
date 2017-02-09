@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <title>Accompany My Song</title>
     <link rel="icon" 
       type="image/png" 
       href="http://images.clipartpanda.com/clipart-music-notes-zxTg75XiA.png">
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <link href="static/style.css" rel="stylesheet">
     <script src='https://code.jquery.com/jquery.js'></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   </head>
-  <body>
+
+  <body background='static/sheet-music.jpg'>
     <nav class="navbar navbar-default">
       <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -28,12 +32,51 @@
               <li><a href='/logout'>Logout</a><li>
               <li><a href='/profile'>{{ session['user'] }}</a><li>
             {% else %}
-              <li><a href="/login">Login</a></li>
+              <li><a href='' data-toggle="modal" data-target="#login_window">Login</a></li>
             {% endif %}
           </ul>
         </div><!-- /.navbar-collapse -->
       </div><!-- /.container-fluid -->
     </nav>
+
+    <div class="container">
+  <!-- Modal -->
+  <div class="modal fade" id="login_window" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Login</h4>
+        </div>
+        <div class="modal-body">
+          <p>Enter your login info</p>
+          <form class="form-signin" action='/login' method='POST'>
+      <h2 class="form-signin-heading">Sign in</h2>
+      <label for="inputUserName" class="sr-only">Username</label>
+      <input name='username' type="text" id="inputUserName" class="form-control" placeholder="Username" required autofocus>
+      <label for="inputPassword" class="sr-only">Password</label>
+      <input type="password" name='password' id="inputPassword" class="form-control" placeholder="Password" required>
+
+      <div class="checkbox">
+        <label>
+          <input type="checkbox" value="remember-me"> Remember me
+        </label>
+      </div>
+
+      <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+    </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+</div>
     {% block body %} {% endblock %}
   </body>
 </html>

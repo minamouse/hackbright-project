@@ -2,15 +2,60 @@
 
 {% block body %}
 
-<form action='/#' id='melody-input' method='POST'>
-    <input type='text' name='text' id='melody'>
-    <button class="btn btn-sm btn-default" id='mel_submit' type="submit">Submit</button>
-</form>
+<div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 text-center">
 
-<audio id='audio' src=''></audio>
+    <audio id='audio' src=''></audio>
+    <div class='btn-group btn-group-lg' role='group'>
+        <button class='b btn btn-default' id='play' type="button" disabled><span class="glyphicon glyphicon-play"></span></button>
+        <button class='b btn btn-default' id='pause' type="button" disabled><span class="glyphicon glyphicon-pause"></span></button>
+        <button class='b btn btn-default' id='stop' type="button" disabled><span class="glyphicon glyphicon-stop"></span></button>
+    </div><br><br>
 
-<button class='b' id='play' type="button" hidden>Play Audio</button>
-<button class='b' id='pause' type="button" hidden>Pause Audio</button>
+    <button data-toggle="modal" data-target="#name_song" class='b btn btn-default' id='save' type="button" disabled><span class="glyphicon glyphicon-floppy-disk"></span></button>
+    <button class='btn btn-default' id='saved' type="button" style="display: none;" disabled><span class="glyphicon glyphicon-floppy-saved"></span></button>
+
+    <form method="get" action="static/song.mid">
+        <button class='b btn btn-default' id='download' type="submit" disabled><span class="glyphicon glyphicon-download-alt"></span></button>
+    </form>
+    
+    <button class='b btn btn-default' id='share' type="button" disabled><span class="glyphicon glyphicon-share-alt"></span></button>
+
+</div>
+
+
+<div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4">
+    <br>
+    <form action='/#' id='melody-input' method='POST'>
+        <input type='text' name='text' id='melody' class='form-control' autofocus><br>
+        <button class="btn btn-lg btn-success btn-block" id='mel_submit' type="submit">Submit</button>
+    </form>
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="name_song" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Name it before you save it</h4>
+        </div>
+        <div class="modal-body">
+          <p>Would you like to name your new song?</p>
+          <form class='form-inline'>
+            <input type='text' id='name_input' class='form-control mb-2 mr-sm-2 mb-sm-0' autofocus>
+            <button id='name_submit' type='submit' class="btn btn-md btn-success" data-dismiss="modal">Save</button>
+            </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
 
 <script>
 
@@ -25,17 +70,37 @@ $('#pause').on('click', function() {
     x.pause();
 });
 
+$('#stop').on('click', function() { 
+    x.pause();
+    x.currentTime = 0;
+});
+
+$('#save').on('click', function() {
+    $('#save').attr('style', "display: none;");
+    $('#saved').attr('style', '');
+});
 
 $('#mel_submit').on('click', function(evt){
     evt.preventDefault();
-    $('.b').attr('hidden', true);
+    $('.b').attr('disabled', true);
     melody = $('#melody').val();
-    console.log(melody);
     $.post('/process_song', {'melody': melody}, function(){
 
         source = 'static/song.wav?random=' + new Date().getTime();
         $('#audio').attr('src', source);
-        $('.b').attr('hidden', false);
+        $('.b').attr('disabled', false);
+        $('#saved').attr('style', "display: none;");
+        $('#save').attr('style', '');
+    });
+});
+
+
+$('#name_submit').on('click', function(evt){
+    evt.preventDefault();
+    var song_name = $('#name_input').val();
+    data = {'name': song_name};
+    $.post('/save', data, function() {
+
     });
 });
 
