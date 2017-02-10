@@ -9,6 +9,7 @@ MarkupSafe==0.23
 midi2audio==0.1.1
 music21==3.1.0
 packaging==16.8
+pkg-resources==0.0.0
 psycopg2==2.6.2
 pygame==1.9.3
 pyparsing==2.1.10
