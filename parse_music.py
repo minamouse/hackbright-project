@@ -180,7 +180,7 @@ def create_pickled_file():
     """
 
     # whether or not you have a notes.p file, this will add only an empty
-    # dictionary to it. This is useful for initializing the pickle file later, \
+    # dictionary to it. This is useful for initializing the pickle file later,
     # but overwrites anything you might already have in your file so be careful!
     pickle.dump({}, open('notes.p', 'wb'))
     return parse_corpus()
@@ -203,6 +203,14 @@ def sample_song(melody):
     mf.close()
     subprocess.call(['timidity static/song.mid -Ow -o static/song.wav'], shell=True)
     return True
+
+
+def perm_save_song(filepath):
+
+    command = 'mv static/song.wav ' + filepath
+    subprocess.call([command], shell=True)
+    return True
+
 
 if __name__ == "__main__":
     import doctest
