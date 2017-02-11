@@ -1,7 +1,8 @@
 from flask import Flask, render_template, redirect, request, jsonify, session, flash
-import os
-from parse_music import sample_song, perm_save_song
 from model import User, Song, db, connect_to_db
+from parse_music import new_song
+import subprocess
+import os
 
 app = Flask(__name__)
 app.secret_key = os.environ['SECRET_KEY']
@@ -9,12 +10,14 @@ app.secret_key = os.environ['SECRET_KEY']
 
 @app.route('/')
 def index():
-    """Send respnse containing Home page"""
+    """Loads homepage."""
+
     return render_template('index.html')
 
 
 @app.route('/profile')
 def profile():
+    """If logged in, loads user's profile page."""
 
     if 'user' not in session:
         return redirect('/')
@@ -27,13 +30,22 @@ def profile():
 
 @app.route('/logout')
 def logout():
+    """If logged in, logs user out and redirects to homepage."""
 
-    session.pop('user')
+    if 'user' in session:
+        session.pop('user')
+
     return redirect('/')
 
 
 @app.route('/login', methods=['POST'])
 def process_login():
+    """Handles user login.
+
+    If username exists in database, checks the given password and logs them in,
+    or flashes an error message. If the username does not exist, creates new
+    user account automatically.
+    """
 
     username = request.form.get('username')
     password = request.form.get('password')
@@ -55,6 +67,11 @@ def process_login():
 
 @app.route('/save', methods=['POST'])
 def save_song():
+    """Handles saving songs to database.
+
+    If user is not logged in, flashes error message. Otherwise, saves song file
+    to a new filename and logs it into the database.
+    """
 
     if 'user' not in session:
         flash('Please log in to save your songs!')
@@ -69,15 +86,18 @@ def save_song():
     db.session.flush()
 
     song.song_path = 'static/music/song' + str(song.song_id) + '.wav'
-    perm_save_song(song.song_path)
+
+    command = 'mv static/song.wav ' + song.song_path
+    subprocess.call([command], shell=True)
 
     db.session.commit()
 
-    return jsonify({})
+    return 'Successful'
 
 
 @app.route('/delete_song', methods=['POST'])
 def delete_song():
+    """Deletes song from database."""
 
     song_id = int(request.form.get('song_id')[4:])
     Song.query.filter_by(song_id=song_id).delete()
@@ -88,9 +108,11 @@ def delete_song():
 
 @app.route('/process_song', methods=['POST'])
 def song():
+    """Processes creating a new song."""
 
     melody = request.form.get('melody')
-    sample_song(melody)
+    new_song(melody)
+
     return jsonify({})
 
 
