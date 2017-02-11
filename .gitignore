@@ -2,3 +2,6 @@ venv/
 *.pyc
 secrets.sh
 .DS_Store
+static/music/
+static/song.mid
+static/song.wav
