@@ -5,89 +5,65 @@
 <h1>{{ session['user'] }}</h1>
 
 <h2>Your saved songs:</h2>
+
 {% for song in songs %}
 
-    <h3>{{ song.name }}</h3>
-    <audio id={{'play' + song.song_id|string}} src={{song.song_path}}></audio>
-    <div class='btn-group btn-group-lg' id={{'song' + song.song_id|string}} role='group'>
-        <button class='play btn btn-default' type="button"><span class="glyphicon glyphicon-play" style="pointer-events: none;"></span></button>
-        <button class='pause btn btn-default' type="button"><span class="glyphicon glyphicon-pause" style="pointer-events: none;"></span></button>
-        <button class='stop btn btn-default' type="button"><span class="glyphicon glyphicon-stop" style="pointer-events: none;"></span></button>
+  <h3>{{ song.name }}</h3>
 
-        <button class='unsave btn btn-default' type="button" data-toggle="modal" data-target="#confirm"><span class="glyphicon glyphicon-floppy-remove" style="pointer-events: none;"></span></button>
-    </div>
+  <audio id={{'play' + song.song_id|string}} src={{song.song_path}}></audio>
 
-      <!-- Modal -->
+  <div class='btn-group btn-group-lg' id={{'song' + song.song_id|string}} role='group'>
+    <button class='play btn btn-default' type="button">
+      <span class="glyphicon glyphicon-play" style="pointer-events: none;"></span>
+    </button>
+    <button class='pause btn btn-default' type="button">
+      <span class="glyphicon glyphicon-pause" style="pointer-events: none;"></span>
+    </button>
+    <button class='stop btn btn-default' type="button">
+      <span class="glyphicon glyphicon-stop" style="pointer-events: none;"></span>
+    </button>
+    <button class='unsave btn btn-default' type="button" data-toggle="modal" data-target="#confirm">
+      <span class="glyphicon glyphicon-floppy-remove" style="pointer-events: none;"></span>
+    </button>
+  </div>
+
+    <!-- Modal -->
   <div class="modal fade" id="confirm" role="dialog">
     <div class="modal-dialog">
-    
-      <!-- Modal content-->
+
+    <!-- Modal content-->
       <div class="modal-content">
         <div class="modal-header">
+
           <button type="button" class="close" data-dismiss="modal">&times;</button>
           <h4 class="modal-title">Are you sure you want to delete your song?</h4>
+        
         </div>
+    
         <div class="modal-body">
+
           <form class='form-inline'>
-            <button id='confirm_delete' type='submit' class="btn btn-md btn-danger" data-dismiss="modal">Delete it!</button>
-            <button id='not_delete' type='submit' class="btn btn-md btn-default" data-dismiss="modal">No wait, don't!</button>
-            </form>
+
+          <button id='confirm_delete' type='submit' class="btn btn-md btn-danger" data-dismiss="modal">Delete it!</button>
+
+          <button id='not_delete' type='submit' class="btn btn-md btn-default" data-dismiss="modal">No wait, don't!</button>
+
+          </form>
+        
         </div>
+
         <div class="modal-footer">
+
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
         </div>
       </div>
-      
     </div>
   </div>
 
 
 {% endfor %}
 
-<script>
-"use strict";
-
-var delete_song;
-
-$('.play').on('click', function(event) {
-    console.log(event);
-    var song_id = event.target.parentNode.id;
-    var audio_id = song_id.replace('song', 'play');
-    console.log(audio_id);
-    var x = document.getElementById(audio_id);
-
-    x.play();
-});
-
-$('.pause').on('click', function(event) {
-    var song_id = event.target.parentNode.id;
-    console.log(song_id);
-    var audio_id = song_id.replace('song', 'play');
-    console.log(audio_id);
-    var x = document.getElementById(audio_id);
-    x.pause();
-});
-
-$('.stop').on('click', function(event) {
-    var song_id = event.target.parentNode.id;
-    var audio_id = song_id.replace('song', 'play');
-    var x = document.getElementById(audio_id);
-    x.pause();
-    x.currentTime = 0;
-});
-
-$('.unsave').on('click', function(event) {
-    delete_song = event.target.parentNode.id;
-});
-
-$('#confirm_delete').on('click', function() {
-    var data = {'song_id': delete_song};
-    $.post('/delete_song', data, function() {
-        location.reload();
-    });
-});
-
-
-</script>
+<script src="static/js/profile.js"></script>
 
 {% endblock %}

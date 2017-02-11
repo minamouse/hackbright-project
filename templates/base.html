@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
   <title>Accompany My Song</title>
   <link href="http://images.clipartpanda.com/clipart-music-notes-zxTg75XiA.png" rel="icon" type="image/png">
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
@@ -9,34 +10,44 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
   </script>
   <link href="static/style.css" rel="stylesheet">
+
 </head>
 <body background='static/sheet-music.jpg'>
+
   <nav class="navbar navbar-default">
     <div class="container-fluid">
       <!-- Brand and toggle get grouped for better mobile display -->
       <div class="navbar-header">
-        <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button> <a class="navbar-brand" href="/">Hackbright Project</a>
+
+        <button aria-expanded="false" class="navbar-toggle collapsed" data-target="#bs-example-navbar-collapse-1" data-toggle="collapse" type="button">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span> <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Hackbright Project</a>
+
       </div><!-- Collect the nav links, forms, and other content for toggling -->
+      
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <ul class="nav navbar-nav navbar-right">
-          <li style="list-style: none">{% if 'user' in session %}</li>
-          <li>
-            <a href='/logout'>Logout</a>
-          </li>
-          <li></li>
-          <li>
-            <a href='/profile'>{{ session['user'] }}</a>
-          </li>
-          <li>{% else %}</li>
-          <li>
-            <a data-target="#login_window" data-toggle="modal" href=''>Login</a>
-          </li>
-          <li style="list-style: none">
-            {% endif %}</li>
+          {% if 'user' in session %}
+            <li>
+              <a href='/logout'>Logout</a>
+            </li>
+            <li>
+              <a href='/profile'>{{ session['user'] }}</a>
+            </li>
+          {% else %}
+            <li>
+              <a data-target="#login_window" data-toggle="modal" href=''>Login</a>
+            </li>
+          {% endif %}
         </ul>
+
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
+
   <div class="container">
     <!-- Modal -->
     <div class="modal fade" id="login_window" role="dialog">
@@ -44,21 +55,34 @@
         <!-- Modal content-->
         <div class="modal-content">
           <div class="modal-header">
+
             <button class="close" data-dismiss="modal" type="button">&times;</button>
             <h4 class="modal-title">Login</h4>
+
           </div>
           <div class="modal-body">
+
             <p>Enter your login info</p>
+
             <form action='/login' class="form-signin" method='post'>
-              <h2 class="form-signin-heading">Sign in</h2><label class="sr-only" for="inputUserName">Username</label> <input autofocus="" class="form-control" id="inputUserName" name='username' placeholder="Username" required="" type="text"> <label class="sr-only" for="inputPassword">Password</label> <input class="form-control" id="inputPassword" name='password' placeholder="Password" required="" type="password">
+              <h2 class="form-signin-heading">Sign in</h2>
+              <label class="sr-only" for="inputUserName">Username</label>
+              <input autofocus="" class="form-control" id="inputUserName" name='username' placeholder="Username" required="" type="text">
+              <label class="sr-only" for="inputPassword">Password</label>
+              <input class="form-control" id="inputPassword" name='password' placeholder="Password" required="" type="password">
+              
               <div class="checkbox">
-                <label><input type="checkbox" value="remember-me"> Remember me</label>
-              </div><button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <label><input type="checkbox" value="remember-me">Remember me</label>
+              </div>
+              <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
             </form>
+
           </div>
+
           <div class="modal-footer">
             <button class="btn btn-default" data-dismiss="modal" type="button">Close</button>
           </div>
+          
         </div>
       </div>
     </div>
