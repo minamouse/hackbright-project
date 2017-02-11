@@ -31,8 +31,13 @@ $('.unsave').on('click', function(event) {
 
 $('#confirm_delete').on('click', function() {
     var data = {'song_id': delete_song};
-    $.post('/delete_song', data, function() {
-        location.reload();
+    $.post('/delete_song', data, function(result) {
+        window.location.href = result;
     });
 });
 
+$('#confirm_profile_delete').on('click', function() {
+    $.get('/delete_profile', function(result) {
+        window.location.href = result;
+    });
+});
