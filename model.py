@@ -4,6 +4,7 @@ db = SQLAlchemy()
 
 
 class User(db.Model):
+    """User table in database. Holds user_id, username and password."""
 
     __tablename__ = 'users'
 
@@ -13,22 +14,40 @@ class User(db.Model):
 
 
 class Song(db.Model):
+    """Song table in database.
+
+    Holds song_id, user_id of the user who created
+    the song, given song name, if it exists, and song_path.
+    """
 
     __tablename__ = 'songs'
 
     song_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     name = db.Column(db.String(40), nullable=True)
-    song_path = db.Column(db.String(35), nullable=False)
+    song_path = db.Column(db.String(35), nullable=True)
 
 
-def connect_to_db(app):
+def connect_to_db(app, db_name='postgresql:///project'):
     """Connect to the database."""
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///project'
+    app.config['SQLALCHEMY_DATABASE_URI'] = db_name
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
     db.app = app
     db.init_app(app)
+
+
+def test_data():
+    """Create some sample data for testing.
+    """
+
+    user = User(username='username', password='password')
+    song = Song(user_id=1, name='song', song_path='static/music/song1.wav')
+
+    db.session.add(user)
+    db.session.commit()
+    db.session.add(song)
+    db.session.commit()
 
 
 if __name__ == "__main__":
