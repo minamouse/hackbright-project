@@ -64,6 +64,45 @@
 
 {% endfor %}
 
+<footer>
+  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_profile">I want to delete my profile, please!</button>
+
+      <!-- Modal -->
+  <div class="modal fade" id="delete_profile" role="dialog">
+    <div class="modal-dialog">
+
+    <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Are you sure you want to delete your entire profile?? All your songs will be gone!! :(</h4>
+        
+        </div>
+    
+        <div class="modal-body">
+
+          <form class='form-inline'>
+
+          <button id='confirm_profile_delete' type='submit' class="btn btn-md btn-danger" data-dismiss="modal">Delete it!</button>
+
+          <button id='not_profile_delete' type='submit' class="btn btn-md btn-default" data-dismiss="modal">No wait, don't!</button>
+
+          </form>
+        
+        </div>
+
+        <div class="modal-footer">
+
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</footer>
+
 <script src="static/js/profile.js"></script>
 
 {% endblock %}
