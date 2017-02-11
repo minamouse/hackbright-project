@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, jsonify, session, flash
+from flask import Flask, render_template, redirect, request, session, flash
 from model import User, Song, db, connect_to_db
 from parse_music import new_song
 import subprocess
@@ -25,6 +25,7 @@ def profile():
     user = User.query.filter_by(username=session['user']).first()
     user_id = user.user_id
     songs = Song.query.filter_by(user_id=user_id).all()
+
     return render_template('profile.html', songs=songs)
 
 
@@ -85,6 +86,7 @@ def save_song():
     db.session.add(song)
     db.session.flush()
 
+    subprocess.call(['mkdir static/music'], shell=True)
     song.song_path = 'static/music/song' + str(song.song_id) + '.wav'
 
     command = 'mv static/song.wav ' + song.song_path
@@ -103,7 +105,22 @@ def delete_song():
     Song.query.filter_by(song_id=song_id).delete()
     db.session.commit()
 
-    return redirect('/profile')
+    return '/profile'
+
+
+@app.route('/delete_profile')
+def delete_profile():
+    """Deletes users profile."""
+
+    user = User.query.filter_by(username=session['user']).first()
+
+    Song.query.filter_by(user_id=user.user_id).delete()
+    User.query.filter_by(user_id=user.user_id).delete()
+
+    db.session.commit()
+    session.pop('user')
+
+    return '/'
 
 
 @app.route('/process_song', methods=['POST'])
@@ -113,7 +130,7 @@ def song():
     melody = request.form.get('melody')
     new_song(melody)
 
-    return jsonify({})
+    return ''
 
 
 if __name__ == '__main__':
