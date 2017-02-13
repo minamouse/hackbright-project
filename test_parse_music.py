@@ -1,39 +1,21 @@
 import unittest
-from music21 import stream, note
+from music21 import corpus, stream
+from parse_music import to_scale_degrees, parse_melody
 
 
 class TestParseMusic(unittest.TestCase):
 
-    def setUp(self):
+    def test_scale_degrees(self):
 
-        # create song with four parts in F major
-        self.song_orig = stream.Stream()
-        orig_part_lists = [['F5', 'D5',  'E5',  'F5'],
-                           ['C5', 'B-4', 'B-4', 'C5'],
-                           ['A4', 'F4',  'G4',  'A4'],
-                           ['F3', 'B-2', 'C3',  'F3']]
+        piece = corpus.parse('bach/bwv262.mxl')
+        transposed_piece = to_scale_degrees(piece)
+        self.assertEqual(transposed_piece.analyze('key').name, 'C major')
 
-        for part in orig_part_lists:
-            part_stream = stream.Part()
+    def test_parse_melody(self):
 
-            for note_str in part:
-                part_stream.append(note.Note(note_str))
+        melody = parse_melody('E4 E4 F4 G4 G4 F4 E4 D4 C4 C4 D4 E4 E4 D4 D4')
+        self.assertEqual(type(melody), stream.Part)
 
-            self.song_orig.append(part_stream)
 
-        # create the same song but in C major
-        self.song_c = stream.Stream()
-        c_part_lists = [['C5', 'A4', 'B4', 'C5'],
-                        ['G4', 'F4', 'F4', 'G4'],
-                        ['E4', 'C4', 'D4', 'E4'],
-                        ['C3', 'F2', 'G2', 'C3']]
-
-        for part in c_part_lists:
-            part_stream = stream.Part()
-
-            for note_str in part:
-                measure = stream.Measure()
-                measure.append(note.Note(note_str))
-                part_stream.append(measure)
-
-            self.song_c.append(part_stream)
+if __name__ == '__main__':
+    unittest.main()
