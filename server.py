@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, session, flash
 from model import User, Song, db, connect_to_db
-from parse_music import new_song
+from helper import new_song, save_file
 import subprocess
 import os
 
@@ -86,12 +86,11 @@ def save_song():
     db.session.add(song)
     db.session.flush()
 
-    subprocess.call(['mkdir static/music'], shell=True)
-    song.song_path = 'static/music/song' + str(song.song_id) + '.wav'
+    path = 'static/music/'
+    filename = 'song' + str(song.song_id) + '.wav'
+    save_file(path, filename)
 
-    command = 'mv static/song.wav ' + song.song_path
-    subprocess.call([command], shell=True)
-
+    song.song_path = path + filename
     db.session.commit()
 
     return 'Successful'
@@ -113,6 +112,11 @@ def delete_profile():
     """Deletes users profile."""
 
     user = User.query.filter_by(username=session['user']).first()
+
+    songs = Song.query.filter_by(user_id=user.user_id).all()
+    for song in songs:
+        path = song.song_path
+        subprocess.call(['rm ' + path], shell=True)
 
     Song.query.filter_by(user_id=user.user_id).delete()
     User.query.filter_by(user_id=user.user_id).delete()
