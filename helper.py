@@ -1,17 +1,16 @@
 from parse_music import parse_melody, to_scale_degrees
+from music21 import midi
 import fake_markov
 import subprocess
-from music21 import midi
 import os
 
 
-def new_song(melody, user_id=None):
+def new_song(melody, user_id=''):
     """ Creates a new song from a user input melody.
     """
 
-    # just to be safe, if the files already exist, they will be deleted
-    subprocess.call(['rm static/song.mid'], shell=True)
-    subprocess.call(['rm static/song.wav'], shell=True)
+    mid = 'static/song' + str(user_id) + '.mid'
+    wav = 'static/song' + str(user_id) + '.wav'
 
     # turn melody string into music21 object and transpose
     parsed_input = parse_melody(melody)
@@ -21,21 +20,20 @@ def new_song(melody, user_id=None):
 
     # write to midi file
     mf = midi.translate.streamToMidiFile(new_song)
-    mf.open('static/song.mid', 'wb')
+    mf.open(mid, 'wb')
     mf.write()
     mf.close()
 
     # convert to .wav format
-    subprocess.call(['timidity static/song.mid -Ow -o static/song.wav'], shell=True)
+    subprocess.call(['timidity ' + mid + ' -Ow -o ' + wav], shell=True)
     return True
 
 
-def save_file(path, filename):
+def save_file(path, filename, user_id=None):
     """Given a path name, moves the temporary song.wav file to the given path.
     """
 
     if not os.path.exists(path):
         os.makedirs(path)
 
-    command = 'mv static/song.wav ' + path + filename
-    subprocess.call([command], shell=True)
+    os.rename('static/song' + str(user_id) + '.wav', path + filename)

@@ -1,7 +1,6 @@
-from flask import Flask, render_template, redirect, request, session, flash, jsonify
+from flask import Flask, render_template, redirect, request, session, jsonify
 from model import User, Song, db, connect_to_db
 from helper import new_song, save_file
-import subprocess
 import os
 
 app = Flask(__name__)
@@ -12,7 +11,12 @@ app.secret_key = os.environ['SECRET_KEY']
 def index():
     """Loads homepage."""
 
-    return render_template('index.html')
+    if 'user' in session:
+        user = User.query.filter_by(user_id=session['user']).first()
+        song_path = 'static/song' + str(user.user_id) + '.wav'
+        return render_template('index.html', song_path=song_path, username=user.username)
+
+    return render_template('index.html', song_path='static/song.wav')
 
 
 @app.route('/profile')
@@ -22,11 +26,10 @@ def profile():
     if 'user' not in session:
         return redirect('/')
 
-    user = User.query.filter_by(username=session['user']).first()
-    user_id = user.user_id
-    songs = Song.query.filter_by(user_id=user_id).all()
+    user = User.query.filter_by(user_id=session['user']).first()
+    songs = Song.query.filter_by(user_id=session['user']).all()
 
-    return render_template('profile.html', songs=songs)
+    return render_template('profile.html', songs=songs, username=user.username)
 
 
 @app.route('/logout')
@@ -52,7 +55,7 @@ def signin():
     if user:
         if user.password == password:
             results['success'] = True
-            session['user'] = username
+            session['user'] = user.user_id
             return jsonify(results)
 
     results['success'] = False
@@ -78,8 +81,11 @@ def signup():
 
     user = User(username=username, password=password)
     db.session.add(user)
+    db.session.flush()
+
+    session['user'] = user.user_id
     db.session.commit()
-    session['user'] = username
+
     results['success'] = True
 
     return jsonify(results)
@@ -89,25 +95,23 @@ def signup():
 def save_song():
     """Handles saving songs to database.
 
-    If user is not logged in, flashes error message. Otherwise, saves song file
-    to a new filename and logs it into the database.
+    Saves song file to a new filename and logs it into the database.
     """
 
-    if 'user' not in session:
-        flash('Please log in to save your songs!')
-        return redirect('/')
-
     name = request.form.get('name')
-    user = User.query.filter_by(username=session['user']).first()
 
-    song = Song(user_id=user.user_id, name=name)
+    song = Song(user_id=session['user'], name=name)
 
     db.session.add(song)
     db.session.flush()
 
     path = 'static/music/'
     filename = 'song' + str(song.song_id) + '.wav'
-    save_file(path, filename)
+
+    if 'user' in session:
+        save_file(path, filename, session['user'])
+    else:
+        save_file(path, filename)
 
     song.song_path = path + filename
     db.session.commit()
@@ -129,15 +133,13 @@ def delete_song():
 def delete_profile():
     """Deletes users profile."""
 
-    user = User.query.filter_by(username=session['user']).first()
-
-    songs = Song.query.filter_by(user_id=user.user_id).all()
+    songs = Song.query.filter_by(user_id=session['user']).all()
     for song in songs:
         path = song.song_path
-        subprocess.call(['rm ' + path], shell=True)
+        os.remove(path)
 
-    Song.query.filter_by(user_id=user.user_id).delete()
-    User.query.filter_by(user_id=user.user_id).delete()
+    Song.query.filter_by(user_id=session['user']).delete()
+    User.query.filter_by(user_id=session['user']).delete()
 
     db.session.commit()
     session.pop('user')
@@ -150,7 +152,11 @@ def song():
     """Processes creating a new song."""
 
     melody = request.form.get('melody')
-    new_song(melody)
+
+    if 'user' in session:
+        new_song(melody, session['user'])
+    else:
+        new_song(melody)
 
     return ''
 
