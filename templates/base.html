@@ -32,7 +32,7 @@
         <ul class="nav navbar-nav navbar-right">
           {% if 'user' in session %}
             <li>
-              <a href='/logout'>Logout</a>
+              <a id="loggedin" href='/logout'>Logout</a>
             </li>
             <li>
               <a href='/profile'>{{ session['user'] }}</a>
@@ -64,8 +64,10 @@
 
             <p>Enter your login info</p>
 
-            <form action='/login' class="form-signin" method='post'>
-              <h2 class="form-signin-heading">Sign in</h2>
+            <div id="flash" class="alert alert-warning" hidden></div>
+            <br>
+
+            <form class="form-signin">
               <label class="sr-only" for="inputUserName">Username</label>
               <input class="form-control" id="inputUserName" name='username' placeholder="Username" required="" type="text">
               <label class="sr-only" for="inputPassword">Password</label>
@@ -74,7 +76,9 @@
               <div class="checkbox">
                 <label><input type="checkbox" value="remember-me">Remember me</label>
               </div>
-              <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+              <button id="signin" class="btn btn-md btn-primary btn-block" type="submit">Sign in</button>
+              <button id="signup" class="btn btn-md btn-success btn-block" type="submit">Create account</button>
+
             </form>
 
           </div>
@@ -88,5 +92,6 @@
     </div>
   </div>
   {% block body %} {% endblock %}
+  <script src="static/js/base.js"></script>
 </body>
 </html>

@@ -15,10 +15,6 @@ $('#stop').on('click', function() {
     audio.currentTime = 0;
 });
 
-$('#save').on('click', function() {
-    $('#save').attr('style', "display: none;");
-    $('#saved').attr('style', '');
-});
 
 $('#mel_submit').on('click', function(evt){
     evt.preventDefault();
@@ -31,6 +27,11 @@ $('#mel_submit').on('click', function(evt){
         $('.b').attr('disabled', false);
         $('#saved').attr('style', "display: none;");
         $('#save').attr('style', '');
+
+        if (!$('#loggedin').length) {
+            $('#save').attr('disabled', true);
+        }
+
     });
 });
 
@@ -39,5 +40,8 @@ $('#name_submit').on('click', function(evt){
     evt.preventDefault();
     var song_name = $('#name_input').val();
     var data = {'name': song_name};
-    $.post('/save', data);
+    $.post('/save', data, function() {
+        $('#save').attr('style', "display: none;");
+        $('#saved').attr('style', '');
+    });
 });
