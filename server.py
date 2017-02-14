@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, request, session, flash
+from flask import Flask, render_template, redirect, request, session, flash, jsonify
 from model import User, Song, db, connect_to_db
 from helper import new_song, save_file
 import subprocess
@@ -39,31 +39,50 @@ def logout():
     return redirect('/')
 
 
-@app.route('/login', methods=['POST'])
-def process_login():
-    """Handles user login.
-
-    If username exists in database, checks the given password and logs them in,
-    or flashes an error message. If the username does not exist, creates new
-    user account automatically.
-    """
+@app.route('/signin.json', methods=['POST'])
+def signin():
 
     username = request.form.get('username')
     password = request.form.get('password')
 
     user = User.query.filter_by(username=username).first()
+
+    results = {}
+
     if user:
-        if user.password != password:
-            flash('Incorrect password!')
-            return redirect('/')
-    else:
-        user = User(username=username, password=password)
-        db.session.add(user)
-        db.session.commit()
+        if user.password == password:
+            results['success'] = True
+            session['user'] = username
+            return jsonify(results)
 
-    session['user'] = user.username
+    results['success'] = False
+    message = 'Username or password incorrect.'
+    results['message'] = message
 
-    return redirect('/')
+    return jsonify(results)
+
+
+@app.route('/signup.json', methods=['POST'])
+def signup():
+
+    username = request.form.get('username')
+    password = request.form.get('password')
+
+    user = User.query.filter_by(username=username).first()
+    results = {}
+    if user:
+        results['success'] = False
+        message = 'Username is taken!'
+        results['message'] = message
+        return jsonify(results)
+
+    user = User(username=username, password=password)
+    db.session.add(user)
+    db.session.commit()
+    session['user'] = username
+    results['success'] = True
+
+    return jsonify(results)
 
 
 @app.route('/save', methods=['POST'])
