@@ -1,18 +1,18 @@
 "use strict";
 
-var x = document.getElementById('audio');
+var audio = $("#audio")[0];
 
 $('#play').on('click', function() {
-    x.play();
+    audio.play();
 });
 
 $('#pause').on('click', function() { 
-    x.pause();
+    audio.pause();
 });
 
 $('#stop').on('click', function() { 
-    x.pause();
-    x.currentTime = 0;
+    audio.pause();
+    audio.currentTime = 0;
 });
 
 $('#save').on('click', function() {
