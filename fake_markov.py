@@ -80,11 +80,11 @@ def create_pickled_file():
     pickle.dump({}, open(PICKLE_FILE, 'wb'))
 
 
-def markov(data):
+def markov(data, note_dict):
     """ Add to pickled version of markov-chain-like dictionary taken from song data.
     """
 
-    note_dict = pickle.load(open(PICKLE_FILE, 'rb'))
+    # note_dict = pickle.load(open(PICKLE_FILE, 'rb'))
 
     for key, value in data.values():
         if key and value:
@@ -93,14 +93,12 @@ def markov(data):
             else:
                 note_dict[key] = [value]
 
-    pickle.dump(note_dict, open(PICKLE_FILE, 'wb'))
+    # pickle.dump(note_dict, open(PICKLE_FILE, 'wb'))
 
 
 def add_chords(melody):
     """ Create chords based on likelihood and add them to the piece.
     """
-
-    note_dict = pickle.load(open(PICKLE_FILE, 'rb'))
 
     accomp = stream.Part()
 
@@ -127,9 +125,16 @@ if __name__ == '__main__':
 
     get_bach_pieces()
 
-    create_pickled_file()
+    # create_pickled_file()
+
+    note_dict = {}
 
     for piece in pieces:
         transposed_piece = to_scale_degrees(piece)
         chord_dict = process_piece(transposed_piece, 0)
-        markov(chord_dict)
+        note_dict = markov(chord_dict, note_dict)
+
+    pickle.dump(note_dict, open(PICKLE_FILE, 'wb'))
+
+else:
+    note_dict = pickle.load(open(PICKLE_FILE, 'rb'))
