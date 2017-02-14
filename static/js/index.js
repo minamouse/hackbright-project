@@ -1,5 +1,7 @@
 "use strict";
 
+var song_path = $('#path_form').attr('action');
+
 var audio = $("#audio")[0];
 
 $('#play').on('click', function() {
@@ -22,7 +24,7 @@ $('#mel_submit').on('click', function(evt){
     var melody = $('#melody').val();
     $.post('/process_song', {'melody': melody}, function(){
 
-        var source = 'static/song.wav?random=' + new Date().getTime();
+        var source = song_path + '?random=' + new Date().getTime();
         $('#audio').attr('src', source);
         $('.b').attr('disabled', false);
         $('#saved').attr('style', "display: none;");
