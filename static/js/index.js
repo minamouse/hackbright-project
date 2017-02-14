@@ -39,7 +39,5 @@ $('#name_submit').on('click', function(evt){
     evt.preventDefault();
     var song_name = $('#name_input').val();
     var data = {'name': song_name};
-    $.post('/save', data, function() {
-
-    });
+    $.post('/save', data);
 });

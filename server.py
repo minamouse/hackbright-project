@@ -92,8 +92,7 @@ def save_song():
 
     song.song_path = path + filename
     db.session.commit()
-
-    return 'Successful'
+    return ''
 
 
 @app.route('/delete_song', methods=['POST'])
