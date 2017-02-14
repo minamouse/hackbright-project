@@ -16,6 +16,7 @@
 
 #### Input:
 
-* note names with octaves - C5, F4 B-4
+* note names with octaves
 * space-separated
 * - is for flats
+* try this: C5 C5 G5 G5 A5 A5 G5
