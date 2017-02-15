@@ -19,6 +19,12 @@ def index():
     return render_template('index.html', song_path='static/song.wav')
 
 
+@app.route('/verovio')
+def verovio():
+
+    return render_template('verovio.html')
+
+
 @app.route('/profile')
 def profile():
     """If logged in, loads user's profile page."""
@@ -37,6 +43,10 @@ def logout():
     """If logged in, logs user out and redirects to homepage."""
 
     if 'user' in session:
+        for music_file in os.listdir('static'):
+            if music_file[4:-4] == str(session['user']):
+                os.remove('static/' + music_file)
+
         session.pop('user')
 
     return redirect('/')
@@ -154,11 +164,13 @@ def song():
     melody = request.form.get('melody')
 
     if 'user' in session:
-        new_song(melody, session['user'])
+        notes, chords = new_song(melody, session['user'])
     else:
-        new_song(melody)
+        notes, chords = new_song(melody)
 
-    return ''
+    data = {'notes': notes, 'chords': chords}
+
+    return jsonify(data)
 
 
 if __name__ == '__main__':

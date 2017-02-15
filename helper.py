@@ -16,7 +16,7 @@ def new_song(melody, user_id=''):
     parsed_input = parse_melody(melody)
     melody = to_scale_degrees(parsed_input)
 
-    new_song = fake_markov.add_chords(melody)
+    new_song, notes, chords = fake_markov.add_chords(melody)
 
     # write to midi file
     mf = midi.translate.streamToMidiFile(new_song)
@@ -26,7 +26,7 @@ def new_song(melody, user_id=''):
 
     # convert to .wav format
     subprocess.call(['timidity ' + mid + ' -Ow -o ' + wav], shell=True)
-    return True
+    return notes, chords
 
 
 def save_file(path, filename, user_id=None):

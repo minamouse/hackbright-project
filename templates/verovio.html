@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<div id="boo"></div>
+<script src="https://unpkg.com/vexflow/releases/vexflow-min.js"></script>
+<script>
+
+var vf = new Vex.Flow.Factory({
+  renderer: {selector: 'boo', width: 500, height: 400}
+});
+
+var score = vf.EasyScore();
+var system = vf.System();
+
+system.addStave({
+  voices: [
+    score.voice(score.notes('C#5/q, B4, A4, G#4')),
+  ]
+}).addClef('treble').addTimeSignature('4/4');
+
+system.addStave({
+  voices: [
+    score.voice(score.notes('C#3/q, B2, A2/8, B2, C#3, D3', {clef: 'bass'}))
+  ]
+}).addClef('bass').addTimeSignature('4/4');
+
+system.addConnector()
+vf.draw();
+</script>
+
+</body>
+</html>

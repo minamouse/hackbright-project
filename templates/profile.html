@@ -2,30 +2,36 @@
 
 {% block body %}
 
-<h1>{{ username }}</h1>
+<h1 style="color: white; text-align: center;">{{ username }}</h1>
 
-<h2>Your saved songs:</h2>
+<h2 style="color: white; margin: 20px;">Your saved songs:</h2>
 
 {% for song in songs %}
 
-  <h3>{{ song.name }}</h3>
+  <div class="img-rounded" style="background: rgba(255,255,255,0.7); display: inline-block; margin: 20px;">
 
-  <audio id={{'play' + song.song_id|string}} src={{song.song_path}}></audio>
+    <div style="text-align: center; margin: 10px;">
+      <h3>{{ song.name }}</h3>
 
-  <div class='btn-group btn-group-lg' id={{'song' + song.song_id|string}} role='group'>
-    <button class='play btn btn-default' type="button">
-      <span class="glyphicon glyphicon-play" style="pointer-events: none;"></span>
-    </button>
-    <button class='pause btn btn-default' type="button">
-      <span class="glyphicon glyphicon-pause" style="pointer-events: none;"></span>
-    </button>
-    <button class='stop btn btn-default' type="button">
-      <span class="glyphicon glyphicon-stop" style="pointer-events: none;"></span>
-    </button>
-    <button class='unsave btn btn-default' type="button" data-toggle="modal" data-target="#confirm">
-      <span class="glyphicon glyphicon-floppy-remove" style="pointer-events: none;"></span>
-    </button>
+      <audio id={{'play' + song.song_id|string}} src={{song.song_path}}></audio>
+
+      <div class='btn-group btn-group-lg' id={{'song' + song.song_id|string}} role='group'>
+        <button class='play btn btn-default' type="button">
+          <span class="glyphicon glyphicon-play" style="pointer-events: none;"></span>
+        </button>
+        <button class='pause btn btn-default' type="button">
+          <span class="glyphicon glyphicon-pause" style="pointer-events: none;"></span>
+        </button>
+        <button class='stop btn btn-default' type="button">
+          <span class="glyphicon glyphicon-stop" style="pointer-events: none;"></span>
+        </button>
+        <button class='unsave btn btn-default' type="button" data-toggle="modal" data-target="#confirm">
+          <span class="glyphicon glyphicon-floppy-remove" style="pointer-events: none;"></span>
+        </button>
+      </div>
+    </div>
   </div>
+  <br>
 
     <!-- Modal -->
   <div class="modal fade" id="confirm" role="dialog">
@@ -65,7 +71,8 @@
 {% endfor %}
 
 <footer>
-  <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_profile">I want to delete my profile, please!</button>
+  <button style="margin: 20px; position:absolute;
+   bottom:0;" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_profile">I want to delete my profile, please!</button>
 
       <!-- Modal -->
   <div class="modal fade" id="delete_profile" role="dialog">
