@@ -19,12 +19,6 @@ def index():
     return render_template('index.html', song_path='static/song.wav')
 
 
-@app.route('/verovio')
-def verovio():
-
-    return render_template('verovio.html')
-
-
 @app.route('/profile')
 def profile():
     """If logged in, loads user's profile page."""
