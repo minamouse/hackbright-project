@@ -1,0 +1,46 @@
+\version "2.18" 
+color = #(define-music-function (parser location color) (string?) #{
+        \once \override NoteHead #'color = #(x11-color color)
+        \once \override Stem #'color = #(x11-color color)
+        \once \override Rest #'color = #(x11-color color)
+        \once \override Beam #'color = #(x11-color color)
+     #})
+    
+\header { } 
+\score  { 
+ \new Voice { \new Voice { \new Staff  = xawzwaeyeefawzy { c' 4  
+                      d' 4  
+                      e' 4  
+                      f' 4  
+                      g' 4  
+                      g' 4  
+                      c' 4  
+                       } 
+                     
+ 
+                \new Staff  = xawzwaeyeefxcww { < c  a,  e  > 4   
+                      < c,  f  g  > 4   
+                      < a  a,  c'  > 4   
+                      < d'  a  d  > 4   
+                      < e'  d  bes  > 4   
+                      < e'  e  b  > 4   
+                      < a  f  f,  > 4   
+                       } 
+                     
+ 
+                 } 
+               
+ 
+           } 
+         
+ 
+  } 
+ 
+\paper { }
+\layout {
+  \context {
+    \RemoveEmptyStaffContext
+    \override VerticalAxisGroup #'remove-first = ##t
+  }
+ }
+ 

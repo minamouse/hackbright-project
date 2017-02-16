@@ -17,6 +17,7 @@ def new_song(melody, user_id=''):
     melody = to_scale_degrees(parsed_input)
 
     new_song, notes, chords = fake_markov.add_chords(melody)
+    # new_song.write('lily.svg', fp='static/scores/song')
 
     # write to midi file
     mf = midi.translate.streamToMidiFile(new_song)
