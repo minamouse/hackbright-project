@@ -20,15 +20,14 @@ def transpose_back(piece, key):
         notes.append(note1.nameWithOctave)
 
     chords = []
-    middle = note.Note('C3')
 
     for chord1 in transposed_piece[1]:
         chord = []
-        highest = 0
-        lowest = 0
-        for c_note in chord1.pitches:
-
-            chord.append(c_note.nameWithOctave)
+        if type(chord1) == note.Rest:
+            chord = 'r'
+        else:
+            for c_note in chord1.pitches:
+                chord.append(c_note.nameWithOctave)
 
         chords.append(chord)
 
@@ -47,7 +46,7 @@ def new_song(melody, user_id=''):
     old_key = parsed_input.analyze('key')
     melody = to_scale_degrees(parsed_input)
 
-    new_song, notes, chords = fake_markov.add_chords(melody)
+    new_song = fake_markov.add_chords(melody)
 
     transposed_song, notes, chords = transpose_back(new_song, old_key)
 

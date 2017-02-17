@@ -102,26 +102,19 @@ def add_chords(melody):
 
     accomp = stream.Part()
 
-    notes = []
-    chords = []
-
     for nnote in melody:
-        notes.append(nnote.nameWithOctave)
         if nnote.nameWithOctave in note_dict:
             new_chord = list(choice(note_dict[nnote.nameWithOctave]))
-
-            chords.append(new_chord)
 
             c = chord.Chord(new_chord)
         else:
             c = note.Rest()
-            chords.append('r')
         accomp.append(c)
 
     piece = stream.Stream()
     piece.append(melody)
     piece.append(accomp)
-    return piece, notes, chords
+    return piece
 
 
 if __name__ == '__main__':

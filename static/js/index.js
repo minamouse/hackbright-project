@@ -26,7 +26,7 @@ var draw_piece = function (notes, chords) {
 
     // stuff that just has to be done
     var VF = Vex.Flow;
-    var canvas = $('canvas')[0];
+    var canvas = $('#score')[0];
     var renderer = new VF.Renderer(canvas, VF.Renderer.Backends.CANVAS);
     var ctx = renderer.getContext();
     var formatter = new VF.Formatter();
@@ -264,6 +264,19 @@ $('#black-keys div').on('mouseup', function(event) {
     var key = $(event.target);
     key.css('border', '');
 });
+
+$('#clear_text').on('click', function() {
+    $('#melody').val('');
+});
+
+
+
+
+
+
+
+
+
 
 
 // save canvas to image file
