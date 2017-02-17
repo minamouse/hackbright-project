@@ -102,13 +102,13 @@ var draw_piece = function (notes, chords) {
                 if (occurences[j][0][0] === 'r') {
                     var note = new VF.StaveNote({clef: 'treble', keys: ['b/4'], duration: 'qr'});
                 } else {
-                    var note = new VF.StaveNote({clef: 'treble', keys: occurences[j][0], duration: 'q'});
+                    var note = new VF.StaveNote({clef: 'treble', keys: occurences[j][0], duration: 'q', auto_stem: true});
                 }
 
                 if (occurences[j][1][0] === 'r') {
                     var chord = new VF.StaveNote({clef: 'bass', keys: ['d/3'], duration: 'qr'});
                 } else {
-                    var chord = new VF.StaveNote({clef: 'bass', keys: occurences[j][1], duration: 'q'});
+                    var chord = new VF.StaveNote({clef: 'bass', keys: occurences[j][1], duration: 'q', auto_stem: true});
                     
                 }
 
