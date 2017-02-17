@@ -3,15 +3,20 @@ var draw_piece = function (notes, chords) {
 
     var convert_note = function(note){
 
-        console.log(note);
         if (note.length == 2) {
             var key = note[0].toLowerCase() + '/' + note[1];
             var accid = '0';
         } else {
-            var key = note[0].toLowerCase() + '/' + note[2];
-            var accid = note[1];
-            if (accid == '-') {
-                accid = 'b';
+            if (note === 'r') {
+                var key = 'r';
+                var accid = '0';
+            } else {
+
+                var key = note[0].toLowerCase() + '/' + note[2];
+                var accid = note[1];
+                if (accid == '-') {
+                    accid = 'b';
+                }
             }
         }
         return [key, accid];
@@ -33,6 +38,7 @@ var draw_piece = function (notes, chords) {
         new_notes.push(results[0]);
         note_accids.push(results[1]);
     }
+
     var new_chords = [];
     var chord_accids = [];
     for (var i = 0; i < chords.length; i++) {
@@ -88,15 +94,23 @@ var draw_piece = function (notes, chords) {
 // addAccidental(3, new VF.Accidental("n"))
             
             if (j >= occurences.length) {
-                console.log("i am adding a gnote");
+
                 var note = new VF.GhostNote({clef: 'treble', keys: ['c/4'], duration: 'q'});
-                console.log("i am adding a gchord");
                 var chord = new VF.GhostNote({clef: 'bass', keys: ['c/4'], duration: 'q'});
             } else {
-                console.log("i am adding a note");
-                var note = new VF.StaveNote({clef: 'treble', keys: occurences[j][0], duration: 'q'});
-                console.log("i am adding a chord");
-                var chord = new VF.StaveNote({clef: 'bass', keys: occurences[j][1], duration: 'q'});
+
+                if (occurences[j][0][0] === 'r') {
+                    var note = new VF.StaveNote({clef: 'treble', keys: ['b/4'], duration: 'qr'});
+                } else {
+                    var note = new VF.StaveNote({clef: 'treble', keys: occurences[j][0], duration: 'q'});
+                }
+
+                if (occurences[j][1][0] === 'r') {
+                    var chord = new VF.StaveNote({clef: 'bass', keys: ['d/3'], duration: 'qr'});
+                } else {
+                    var chord = new VF.StaveNote({clef: 'bass', keys: occurences[j][1], duration: 'q'});
+                    
+                }
 
                 if (accidentals[j][0] !== '0') {
                     note.addAccidental(0, new VF.Accidental(accidentals[j][0]));
@@ -195,6 +209,60 @@ $('#name_submit').on('click', function(evt){
         $('#save').attr('style', "display: none;");
         $('#saved').attr('style', '');
     });
+});
+
+
+var add_note = function(source) {
+
+
+    var note = source.split('/')[2].split('.')[0];
+    note = note.replace('s', '#');
+
+    var text = $('#melody').val();
+    if (text === '') {
+        $('#melody').val(note);
+    } else {
+        $('#melody').val(text + ' ' + note);
+    }
+
+};
+
+
+$('#white-keys div').on('mousedown', function(event) {
+
+    var key = $(event.target);
+    key.css('border-width', '2px');
+    var audio = key.children();
+
+    add_note(audio.attr('src'));
+
+    audio[0].currentTime = 0;
+    audio[0].play();
+});
+
+$('#white-keys div').on('mouseup', function(event) {
+
+    var key = $(event.target);
+    key.css('border-width', '1px');
+
+});
+
+$('#black-keys div').on('mousedown', function(event) {
+
+    var key = $(event.target);
+    key.css('border', 'solid 1px grey');
+    var audio = key.children();
+
+    add_note(audio.attr('src'));
+
+    audio[0].currentTime = 0;
+    audio[0].play();
+});
+
+$('#black-keys div').on('mouseup', function(event) {
+
+    var key = $(event.target);
+    key.css('border', '');
 });
 
 

@@ -10,3 +10,50 @@ nav {
     background-color: #077E67;
     border-color: #077E67;
 }*/
+
+
+#white-keys div {
+    display: inline-block;
+    width: 60px;
+    background: white;
+    height: 300px;
+    border-style: solid;
+    border-color: grey;
+    border-width: 1px;
+}
+
+#black-keys div{
+    pointer-events: all;
+}
+
+#black-keys div:not(#first):not(#last){
+
+    display: inline-block;
+    background: black;
+    height: 100%;
+    width: 40px;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+
+#black-keys.invisible {
+    pointer-events: none;
+}
+
+#first {
+    display: inline-block;
+    background: black;
+    height: 100%;
+    width: 40px;
+    margin-right: 10px;
+
+}
+
+#last {
+    display: inline-block;
+    background: black;
+    height: 100%;
+    width: 40px;
+    margin-left: 10px;
+}
