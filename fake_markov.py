@@ -41,7 +41,7 @@ def process_piece(piece, mel_part):
 
     # get all the measure elements
     melody_measures = [m for m in melody if type(m) == stream.Measure]
-    measures = [m for m in piece if type(m) == stream.Measure]
+    chord_measures = [m for m in piece if type(m) == stream.Measure]
 
     comb_dict = {}
 
@@ -54,7 +54,7 @@ def process_piece(piece, mel_part):
             elif type(n) == note.Rest:
                 comb_dict[n.offset] = ('Rest', [])
 
-    for m in measures:
+    for m in chord_measures:
         m.transferOffsetToElements()
         for c in m:
             if type(c) == chord.Chord:
@@ -70,21 +70,9 @@ def process_piece(piece, mel_part):
     return comb_dict
 
 
-def create_pickled_file():
-    """ Use this function to create a pickle file for the sample corpus.
-    """
-
-    # whether or not you have a PICKLE_FILE file, this will add only an empty
-    # dictionary to it. This is useful for initializing the pickle file later,
-    # but overwrites anything you might already have in your file so be careful!
-    pickle.dump({}, open(PICKLE_FILE, 'wb'))
-
-
 def markov(data, note_dict):
     """ Add to pickled version of markov-chain-like dictionary taken from song data.
     """
-
-    # note_dict = pickle.load(open(PICKLE_FILE, 'rb'))
 
     for key, value in data.values():
         if key and value:
@@ -92,8 +80,6 @@ def markov(data, note_dict):
                 note_dict[key].append(value)
             else:
                 note_dict[key] = [value]
-
-    # pickle.dump(note_dict, open(PICKLE_FILE, 'wb'))
 
 
 def add_chords(melody):
