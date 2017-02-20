@@ -7,7 +7,6 @@ $('#signin').on('click', function(evt) {
             };
 
     $.post('/signin.json', data, function(result) {
-        console.log(result);
         if (result.success) {
             location.reload();
         } else {

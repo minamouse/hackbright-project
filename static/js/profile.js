@@ -6,7 +6,6 @@ $('.play').on('click', function(event) {
     var song_id = event.target.parentNode.id;
     var audio_id = song_id.replace('song', 'play');
     var audio = $(audio_id)[0];
-
     audio.play();
 });
 
