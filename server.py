@@ -11,8 +11,8 @@ app.secret_key = os.environ['SECRET_KEY']
 def index():
     """Loads homepage."""
 
-    if 'user' in session:
-        user = User.query.filter_by(user_id=session['user']).first()
+    if 'user_id' in session:
+        user = User.query.filter_by(user_id=session['user_id']).first()
         song_path = 'static/song' + str(user.user_id) + '.wav'
         return render_template('index.html', song_path=song_path, username=user.username)
 
@@ -23,11 +23,11 @@ def index():
 def profile():
     """If logged in, loads user's profile page."""
 
-    if 'user' not in session:
+    if 'user_id' not in session:
         return redirect('/')
 
-    user = User.query.filter_by(user_id=session['user']).first()
-    songs = Song.query.filter_by(user_id=session['user']).all()
+    user = User.query.filter_by(user_id=session['user_id']).first()
+    songs = Song.query.filter_by(user_id=session['user_id']).all()
 
     return render_template('profile.html', songs=songs, username=user.username)
 
@@ -36,12 +36,12 @@ def profile():
 def logout():
     """If logged in, logs user out and redirects to homepage."""
 
-    if 'user' in session:
-        for music_file in os.listdir('static'):
-            if music_file[4:-4] == str(session['user']):
-                os.remove('static/' + music_file)
+    if 'user_id' in session:
+        song_path = 'static/song' + str(session['user_id']) + '.wav'
+        if os.path.exists(song_path):
+            os.remove(song_path)
 
-        session.pop('user')
+        session.pop('user_id')
 
     return redirect('/')
 
@@ -59,7 +59,7 @@ def signin():
     if user:
         if user.password == password:
             results['success'] = True
-            session['user'] = user.user_id
+            session['user_id'] = user.user_id
             return jsonify(results)
 
     results['success'] = False
@@ -87,7 +87,7 @@ def signup():
     db.session.add(user)
     db.session.flush()
 
-    session['user'] = user.user_id
+    session['user_id'] = user.user_id
     db.session.commit()
 
     results['success'] = True
@@ -102,9 +102,11 @@ def save_song():
     Saves song file to a new filename and logs it into the database.
     """
 
-    name = request.form.get('name')
+    if 'user_id' not in session:
+        return ''
 
-    song = Song(user_id=session['user'], name=name)
+    name = request.form.get('name')
+    song = Song(user_id=session['user_id'], name=name)
 
     db.session.add(song)
     db.session.flush()
@@ -112,10 +114,7 @@ def save_song():
     path = 'static/music/'
     filename = 'song' + str(song.song_id) + '.wav'
 
-    if 'user' in session:
-        save_file(path, filename, session['user'])
-    else:
-        save_file(path, filename)
+    save_file(path, filename, session['user_id'])
 
     song.song_path = path + filename
     db.session.commit()
@@ -137,16 +136,15 @@ def delete_song():
 def delete_profile():
     """Deletes users profile."""
 
-    songs = Song.query.filter_by(user_id=session['user']).all()
+    songs = Song.query.filter_by(user_id=session['user_id']).all()
     for song in songs:
-        path = song.song_path
-        os.remove(path)
+        os.remove(song.song_path)
 
-    Song.query.filter_by(user_id=session['user']).delete()
-    User.query.filter_by(user_id=session['user']).delete()
+    Song.query.filter_by(user_id=session['user_id']).delete()
+    User.query.filter_by(user_id=session['user_id']).delete()
 
     db.session.commit()
-    session.pop('user')
+    session.pop('user_id')
 
     return '/'
 
@@ -157,8 +155,8 @@ def song():
 
     melody = request.form.get('melody')
 
-    if 'user' in session:
-        notes, chords = new_song(melody, session['user'])
+    if 'user_id' in session:
+        notes, chords = new_song(melody, session['user_id'])
     else:
         notes, chords = new_song(melody)
 
