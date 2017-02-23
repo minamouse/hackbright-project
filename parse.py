@@ -83,10 +83,10 @@ def parse_file(song_path):
         new_rest.append(convert_to_vector(r))
 
     new_df = DataFrame([melody, new_rest]).T
-    return new_df
+    return new_df.fillna('r')
 
 
-def parse_all_files(directory='music_files/clementi'):
+def parse_all_files(directory='music_files/beethoven'):
     songs = []
     for root, dirs, files in os.walk(directory):
         for f in files:
@@ -121,23 +121,30 @@ def get_data(df, window=2):
     return features, labels
 
 
+parse_all_files('music_files/corelli')
+
+# all_features = []
+# all_labels = []
+
 # parsed_files = parse_all_files()
 
-df = parse_file('music_files/beethoven/sonata01-1.krn')
-features, labels = get_data(df)
+# for df in parsed_files:
+#     features, labels = get_data(df, 5)
+#     all_features.extend(features)
+#     all_labels.extend(labels)
 
-label_convert = {}
-new_labels = []
-for l in labels:
-    new_l = ''.join([str(x) for x in l])
-    label_convert[new_l] = l
-    new_labels.append(new_l)
+# label_convert = {}
+# new_labels = []
+# for l in all_labels:
+#     new_l = ''.join([str(x) for x in l])
+#     label_convert[new_l] = l
+#     new_labels.append(new_l)
 
-xtrain, xtest, ytrain, ytest = ttsplit(features, new_labels, test_size=0.33)
+# xtrain, xtest, ytrain, ytest = ttsplit(all_features, new_labels, test_size=0.33)
 
-run_rfc(xtrain, ytrain, xtest, ytest)
-run_gnb(xtrain, ytrain, xtest, ytest)
-run_knn(xtrain, ytrain, xtest, ytest)
+# run_rfc(xtrain, ytrain, xtest, ytest)
+# run_gnb(xtrain, ytrain, xtest, ytest)
+# run_knn(xtrain, ytrain, xtest, ytest)
 
 
 
