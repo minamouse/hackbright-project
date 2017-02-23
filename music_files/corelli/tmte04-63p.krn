@@ -1,0 +1,37 @@
+!!!OTL: 63p. Corelli, Concerto Grosso in G minor, op. 6 no. 8, mvt. 1, mm. 1-6
+!!!OMD: Vivace
+**Bnum	**kern	**kern	**kern	**kern
+*staff4	*staff4	*staff3	*staff2	*staff1
+*	*Icello	*Iviola	*Ivioln	*Ivioln
+*clefF4	*clefF4	*clefC3	*clefG2	*clefG2
+*k[b-]	*k[b-]	*k[b-]	*k[b-]	*k[b-]
+*g:	*g:	*g:	*g:	*g:
+*M3/4	*M3/4	*M3/4	*M3/4	*M3/4
+*MM200	*MM200	*MM200	*MM200	*MM200
+=1-	=1-	=1-	=1-	=1-
+.	4GG/	4d\	4d/	4b-\
+.	4r	4r	4r	4r
+.	4r	4r	4r	4r
+=2	=2	=2	=2	=2
+6#	4AA/	4c\	4f#/	4cc\
+.	4r	4r	4r	4r
+.	4r	4r	4r	4r
+=3	=3	=3	=3	=3
+6	4BB-/	4B-/	4g/	4dd\
+6 5	4BBn/	4G/	4fn/	4dd\
+.	8r	8r	8r	8r
+.	8BB/	8G/	8f/	8dd\
+=4	=4	=4	=4	=4
+9 -	4C/	2G/	2e-/	4dd\
+8	4CC/	.	.	4g/
+.	4C/	4g\	4ee-\	4cc\
+=5	=5	=5	=5	=5
+*	*M3/2	*M3/2	*M3/2	*M3/2
+6 5	2F#\	2a\	2dd\	2cc\
+.	2G\	2g\	2d/	2b-\
+6	2E-\	2G/	2g/	2cc\
+=6	=6	=6	=6	=6
+#	2.D\	2.A/	2.f#/	2.dd\
+=	=	=	=	=
+*-	*-	*-	*-	*-
+!!!hum2abc: -q

@@ -1,0 +1,35 @@
+!!!COM: Vivaldi, Antonio
+!!!OTL: Concerto a violino solo, No. 5
+!!!XEN: Violin Concerto No. 5
+!!!OTP: La Tempesta di Mare
+!!!OTA: The Storm at Sea
+!!!OPR: Il Cimento dell'armonia e dell'inventione
+!!!XEN: The Contest of Harmony and Invention
+!!!OPS: Opus 8
+!!!ONM: No. 5
+!!!OMV: Movement 2.
+!!!YEC: Copyright 1996, Center for Computer Assisted Research in the Humanities
+!!!YEM: Rights to all derivative electronic formats reserved.
+!!!YEM: Refer to licensing agreement for important restrictions.
+!!!OMD: Largo
+**kern	**kern	**kern	**kern	**kern	**Bnum
+*thru	*thru	*thru	*thru	*thru	*thru
+*Icello	*Iviola	*Ivioln	*Ivioln	*Ivioln	*Icemba
+*Icemba	*	*	*	*	*
+*ICstr	*ICstr	*ICstr	*ICstr	*ICstr	*ICklav
+*ICklav	*	*	*	*	*
+!cello	!viola 	!violino 2	!violino 1	!violino principale	!continuo
+!basso continuo	!	!	!	!	!
+*clefF4	*clefC3	*clefG2	*clefG2	*clefG2	*
+*k[b-e-a-]	*k[b-e-a-]	*k[b-e-a-]	*k[b-e-a-]	*k[b-e-a-]	*k[b-e-a-]
+*c:	*c:	*c:	*c:	*c:	*c:
+*M4/4	*M4/4	*M4/4	*M4/4	*M4/4	*M4/4
+=1-	=1-	=1-	=1-	=1-	=1-
+8C\L	4.en\	8gg\L	8bb-\L	8bb-\L	7 n
+8c\	.	16.g\L	16.b-\L	16.b-\L	.
+.	.	32f\JJk	32a-\JJk	32a-\JJk	.
+8c\	.	8en\L	8g\L	8g\L	.
+8C\J	8e\	8gg\J	8bb-\J	8bb-\J	.
+4FF/	4c\	4ff\	4aa-\	8aa-\L	.
+.	.	.	.	(8cc\	.
+!	!	!	!	! Amsterdam print has an erroneously has G5 here.	!
