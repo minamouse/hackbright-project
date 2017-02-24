@@ -13,7 +13,7 @@ def get_score(predictions, correct_results):
     return (float(correct)/float(len(predictions)))*100
 
 
-def run_knn(xtrain, ytrain, xtest, ytest):
+def run_knn_test(xtrain, ytrain, xtest, ytest):
     """
     default settings ==> 45%
     algorithm='ball_tree' ==> 45%
@@ -35,7 +35,7 @@ def run_knn(xtrain, ytrain, xtest, ytest):
     print 'knn:', score
 
 
-def run_gnb(xtrain, ytrain, xtest, ytest):
+def run_gnb_test(xtrain, ytrain, xtest, ytest):
     """
     default settings ==> 12%
     """
@@ -47,7 +47,7 @@ def run_gnb(xtrain, ytrain, xtest, ytest):
     print 'gnb:', score
 
 
-def run_svm(xtrain, ytrain, xtest, ytest):
+def run_svm_test(xtrain, ytrain, xtest, ytest):
     """
     default settings ==> 51%
     """
@@ -59,7 +59,7 @@ def run_svm(xtrain, ytrain, xtest, ytest):
     print 'svm:', score
 
 
-def run_rfc(xtrain, ytrain, xtest, ytest):
+def run_rfc_test(xtrain, ytrain, xtest, ytest):
     """
     default settings ==> 51%
     n_estimators=20 ==> 50%
