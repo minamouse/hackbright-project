@@ -1,6 +1,7 @@
-from parse_music import parse_melody, to_scale_degrees
-from music21 import midi, interval, note
-import fake_markov
+from parse_music import parse_melody
+from music21 import midi, interval, note, stream, chord
+from music21.pitch import PitchException
+from random_forest import add_chords
 import subprocess
 import os
 
@@ -34,6 +35,24 @@ def transpose_back(piece, key):
     return transposed_piece, notes, chords
 
 
+def combine_notes_and_chords(melody, chords):
+
+    accomp = stream.Part()
+
+    for c_notes in chords:
+        try:
+            c = chord.Chord(c_notes)
+        except PitchException:
+            c = note.Rest()
+        accomp.append(c)
+
+    piece = stream.Stream()
+    piece.append(melody)
+    piece.append(accomp)
+
+    return piece
+
+
 def new_song(melody, user_id=''):
     """ Creates a new song from a user input melody.
     """
@@ -42,24 +61,24 @@ def new_song(melody, user_id=''):
     wav = 'static/song' + str(user_id) + '.wav'
 
     # turn melody string into music21 object and transpose
-    parsed_input = parse_melody(melody)
-    old_key = parsed_input.analyze('key')
-    melody = to_scale_degrees(parsed_input)
+    parsed_input, numbers, notes = parse_melody(melody)
+    chords = add_chords(numbers)
 
-    new_song = fake_markov.add_chords(melody)
+    for x in range(len(chords)):
+        for n in range(len(chords[x])):
+            if chords[x][n] != 'r':
+                chords[x][n] += '3'
 
-    transposed_song, notes, chords = transpose_back(new_song, old_key)
-
-    # new_song.write('lily.svg', fp='static/scores/song')
-
+    song = combine_notes_and_chords(parsed_input, chords)
     # write to midi file
-    mf = midi.translate.streamToMidiFile(transposed_song)
+    mf = midi.translate.streamToMidiFile(song)
     mf.open(mid, 'wb')
     mf.write()
     mf.close()
 
     # convert to .wav format
     subprocess.call(['timidity ' + mid + ' -Ow -o ' + wav], shell=True)
+    print notes, chords
     return notes, chords
 
 
