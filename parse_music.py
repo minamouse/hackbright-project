@@ -6,14 +6,21 @@ def parse_melody(melody):
     """Takes in a string of note names and returns a music21 object.
     """
     piece = stream.Part()
+    numbers = []
+    notes = []
 
     for item in melody.split():
         try:
-            piece.append(note.Note(item))
+            n = note.Note(item)
+            piece.append(n)
+            numbers.append(n.pitch.midi % 12)
+            notes.append(n.nameWithOctave)
         except PitchException:
             piece.append(note.Rest(item))
+            numbers.append(12)
+            notes.append('r')
 
-    return piece
+    return piece, numbers, notes
 
 
 def to_scale_degrees(piece):
