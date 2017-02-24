@@ -1,15 +1,16 @@
 body {
     background-size: 100%;
+    background-color: #367ABD;
 }
 
 nav {
-    opacity: 0.7;
+    opacity: 0.8;
 }
 
-/*.navbar{
-    background-color: #077E67;
-    border-color: #077E67;
-}*/
+.navbar{
+    background-color: #6BCCFF;
+    border-color: #6BCCFF;
+}
 
 
 #white-keys div {

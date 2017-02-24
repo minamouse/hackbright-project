@@ -228,7 +228,5 @@ $('#clear_text').on('click', function() {
 
 
 
-
-
 // save canvas to image file
 // var img = canvas.toDataURL("image/png");
