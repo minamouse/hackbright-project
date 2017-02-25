@@ -8,14 +8,18 @@
 
 {% for song in songs %}
 
-  <div class="img-rounded" style="background: rgba(255,255,255,0.7); display: inline-block; margin: 20px;">
+  <div class="img-rounded col-xs-12 col-sm-8 col-sm-offset-2" style="background: rgba(149,236,214,0.8); display: inline-block; overflow: hidden; margin-top: 20px; margin-bottom: 20px;">
 
-    <div style="text-align: center; margin: 10px;">
+    <div style="text-align: center;">
       <h3>{{ song.name }}</h3>
+      <div style="text-align: center; overflow-x: auto;">
+        <img src={{ song.score_path }}>
+      </div>
+      <br>
 
-      <audio id={{'play' + song.song_id|string}} src={{song.song_path}}></audio>
+      <audio id={{'play' + song.song_id|string}} src={{ song.song_path }}></audio>
 
-      <div class='btn-group btn-group-lg' id={{'song' + song.song_id|string}} role='group'>
+      <div class='btn-group btn-group-lg' id={{'song' + song.song_id|string}} role='group' style="margin-bottom: 10px;">
         <button class='play btn btn-default' type="button">
           <span class="glyphicon glyphicon-play" style="pointer-events: none;"></span>
         </button>
@@ -71,8 +75,7 @@
 {% endfor %}
 
 <footer>
-  <button style="margin: 20px; position:absolute;
-   bottom:0;" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_profile">I want to delete my profile, please!</button>
+  <button style="margin: 20px; bottom:0;" type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete_profile">I want to delete my profile, please!</button>
 
       <!-- Modal -->
   <div class="modal fade" id="delete_profile" role="dialog">

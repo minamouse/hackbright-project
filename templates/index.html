@@ -1,19 +1,17 @@
 {% extends 'base.html' %}
 
 {% block body %}
-<!-- 
-<div id="boo" class="img-rounded" style="text-align: center; background: rgba(255,255,255,0.7); width: 530px; margin-left: auto; margin-right: auto;"></div>
-<br>
- -->
 
-<div class="col-xs-10 col-xs-offset-1">
+
+
+
+<div class="col-xs-12 col-sm-10 col-sm-offset-1" style="margin-right: 0; padding-right: 0;">
   <div id="boo" class="img-rounded" style="overflow: hidden; text-align: center; background: rgba(149,236,214,0.8); overflow-x: auto;">
     <canvas id="score" height="230" width=""></canvas>
   </div>
 </div>
-<br>
 
-<div class="col-xs-1">
+<div class="col-xs-1 col-xs-offset-1 col-sm-1 col-sm-offset-0" style="margin-left: 0; padding-left: 10px;">
   <div>
     <button data-toggle="modal" data-target="#name_song" class='b btn btn-default' id='save' type="button" disabled>
       <span class="glyphicon glyphicon-floppy-disk"></span>
@@ -21,19 +19,19 @@
     <button class='btn btn-default' id='saved' type="button" style="display: none;" disabled>
       <span class="glyphicon glyphicon-floppy-saved"></span>
     </button>
-
-    <form id="path_form" method="get" action={{ song_path }}>
+    <a class='b btn btn-default' id='download' href={{ song_path }} download>
+      <span class="glyphicon glyphicon-download-alt"></span>
+    </a>
+<!--     <form id="path_form" method="get" action={{ song_path }}>
       <button class='b btn btn-default' id='download' type="submit" disabled>
         <span class="glyphicon glyphicon-download-alt"></span>
       </button>
     </form>
-  </div>
+ -->  </div>
 </div>
-<br>
 
-<!-- <div id="boo" class="img-rounded" style="text-align: center; background: rgba(255,255,255,0.7); width: 530px; margin-left: auto; margin-right: auto;"><img src=""></div> -->
 
-<div class="col-xs-8 col-xs-offset-2 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 text-center">
+<div class="col-xs-8 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 text-center" style="margin-top: 10px;">
 
     <audio id='audio' src=''></audio>
     
@@ -47,25 +45,28 @@
       <button class='b btn btn-default' id='stop' type="button" disabled>
         <span class="glyphicon glyphicon-stop"></span>
       </button>
-    </div><br><br>
+    </div>
 
 
 
 </div>
+<br>
+<div class='col-xs-10 col-xs-offset-1' style="padding-top: 70px;">
+  <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
+    <input type='text' name='text' id='melody' class='form-control' data-toggle="tooltip" data-placement="left" data-html="true" title="Input should be in the form of: <br> C4 D4 E4 F4 G4 G4 C4" autofocus>
+  </div>
+  <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
+    <button class="btn btn-md btn-block" id='mel_submit' type="submit" style="background-color: #83DE83;">Submit</button>
+  </div>
 
-<div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
-  <input type='text' name='text' id='melody' class='form-control' data-toggle="tooltip" data-placement="left" data-html="true" title="Input should be in the form of: <br> C4 D4 E4 F4 G4 G4 C4" autofocus>
-</div>
-<div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
-  <button class="btn btn-md btn-block" id='mel_submit' type="submit" style="background-color: #83DE83;">Submit</button>
+  <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
+    <button class="btn btn-md btn-default btn-block" id='clear_text' type="submit">Clear</button>
+  </div>
 </div>
 
-<div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
-  <button class="btn btn-md btn-default btn-block" id='clear_text' type="submit">Clear</button>
-</div>
-
-<div class="col-xs-12" style="padding: 20px; overflow: hidden;">
-  <div class="img-rounded" style="position: relative; overflow-x:auto; height: 340px; background: rgba(0,0,0,0.8);">
+<div class="col-xs-12" style="padding: 20px; overflow: hidden; margin-top: 20px;">
+  <center>
+  <div class="img-rounded" style="position: relative; overflow-x:auto; height: 340px; background: rgba(0,0,0,0.8); max-width: 1260px">
     <div id="white-keys" style="position: absolute; height: 300px; width: 1260px;">
 
       <div class="img-rounded">
@@ -270,8 +271,8 @@
 
     </div>
   </div>
+</center>
 </div>
-
 
 
 
