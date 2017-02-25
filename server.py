@@ -6,7 +6,8 @@ import os
 app = Flask(__name__)
 app.secret_key = os.environ['SECRET_KEY']
 
-os.makedirs('static/user_files')
+if not os.path.exists('static/user_files'):
+    os.makedirs('static/user_files')
 
 
 @app.route('/')
