@@ -5,21 +5,22 @@ var delete_song;
 $('.play').on('click', function(event) {
     var song_id = event.target.parentNode.id;
     var audio_id = song_id.replace('song', 'play');
-    var audio = $(audio_id)[0];
+    var audio = $('#' + audio_id)[0];
+    console.log(song_id)
     audio.play();
 });
 
 $('.pause').on('click', function(event) {
     var song_id = event.target.parentNode.id;
     var audio_id = song_id.replace('song', 'play');
-    var audio = $(audio_id)[0];
+    var audio = $('#' + audio_id)[0];
     audio.pause();
 });
 
 $('.stop').on('click', function(event) {
     var song_id = event.target.parentNode.id;
     var audio_id = song_id.replace('song', 'play');
-    var audio = $(audio_id)[0];
+    var audio = $('#' + audio_id)[0];
     audio.pause();
     audio.currentTime = 0;
 });

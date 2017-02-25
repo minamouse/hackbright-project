@@ -121,7 +121,7 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
-var song_path = $('#path_form').attr('action');
+var song_path = $('#download').attr('href');
 var audio = $("#audio")[0];
 
 $('#play').on('click', function() {
@@ -136,6 +136,15 @@ $('#stop').on('click', function() {
     audio.pause();
     audio.currentTime = 0;
 });
+
+
+// $('#test_button').on('click', function() {
+//     $('html,body').animate({
+//         scrollTop: $('#test_div').offset().top},
+//         1500);
+
+// })
+
 
 $('#mel_submit').on('click', function(evt){
     evt.preventDefault();
@@ -153,6 +162,9 @@ $('#mel_submit').on('click', function(evt){
         // console.log((Math.ceil(results.notes.length/4) * 200) + 50);
         draw_piece(results.notes, results.chords);
         // draw_other_piece(results.notes, results.chords);
+        // save canvas to image file
+        var img = $('canvas')[0].toDataURL("image/png");
+        $('canvas').attr('src', img);
 
         $('.b').attr('disabled', false);
         $('#saved').attr('style', "display: none;");
@@ -167,7 +179,8 @@ $('#mel_submit').on('click', function(evt){
 
 $('#name_submit').on('click', function(evt){
     evt.preventDefault();
-    var data = {'name': $('#name_input').val()};
+    var data = {'name': $('#name_input').val(),
+                'image': $('canvas').attr('src')};
     $.post('/save', data, function() {
         $('#save').attr('style', "display: none;");
         $('#saved').attr('style', '');
@@ -227,6 +240,3 @@ $('#clear_text').on('click', function() {
 
 
 
-
-// save canvas to image file
-// var img = canvas.toDataURL("image/png");
