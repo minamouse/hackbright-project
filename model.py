@@ -25,7 +25,8 @@ class Song(db.Model):
     song_id = db.Column(db.Integer, autoincrement=True, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'), nullable=False)
     name = db.Column(db.String(40), nullable=True)
-    song_path = db.Column(db.String(35), nullable=True)
+    song_path = db.Column(db.String(50), nullable=True)
+    score_path = db.Column(db.String(50), nullable=True)
 
 
 def connect_to_db(app, db_name='postgresql:///project'):

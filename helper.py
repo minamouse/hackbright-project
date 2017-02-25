@@ -57,8 +57,11 @@ def new_song(melody, user_id=''):
     """ Creates a new song from a user input melody.
     """
 
-    mid = 'static/song' + str(user_id) + '.mid'
-    wav = 'static/song' + str(user_id) + '.wav'
+    path = 'static/user_files/user' + str(user_id) + '/temp/'
+    if not os.path.exists(path):
+        os.makedirs(path)
+    mid = path + 'temp_song.mid'
+    wav = path + 'temp_song.wav'
 
     # turn melody string into music21 object and transpose
     parsed_input, numbers, notes = parse_melody(melody)
@@ -89,4 +92,20 @@ def save_file(path, filename, user_id=None):
     if not os.path.exists(path):
         os.makedirs(path)
 
-    os.rename('static/song' + str(user_id) + '.wav', path + filename)
+    print path, filename
+
+    os.rename('static/user_files/user' + str(user_id) + '/temp/temp_song.wav', path + filename)
+
+
+def save_image(path, filename, data):
+
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    image = data[22:]
+    missing_padding = len(image) % 4
+    if missing_padding != 0:
+        image += b'=' * (4 - missing_padding)
+    fh = open(path+filename, "wb")
+    fh.write(image.decode('base64'))
+    fh.close()

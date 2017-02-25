@@ -1,10 +1,12 @@
 from flask import Flask, render_template, redirect, request, session, jsonify
 from model import User, Song, db, connect_to_db
-from helper import new_song, save_file
+from helper import new_song, save_file, save_image
 import os
 
 app = Flask(__name__)
 app.secret_key = os.environ['SECRET_KEY']
+
+os.makedirs('static/user_files')
 
 
 @app.route('/')
@@ -13,10 +15,10 @@ def index():
 
     if 'user_id' in session:
         user = User.query.filter_by(user_id=session['user_id']).first()
-        song_path = 'static/song' + str(user.user_id) + '.wav'
+        song_path = 'static/user_files/user' + str(user.user_id) + '/temp/temp_song.wav'
         return render_template('index.html', song_path=song_path, username=user.username)
 
-    return render_template('index.html', song_path='static/song.wav')
+    return render_template('index.html', song_path='static/user_files/user/temp/temp_song.wav')
 
 
 @app.route('/profile')
@@ -37,7 +39,7 @@ def logout():
     """If logged in, logs user out and redirects to homepage."""
 
     if 'user_id' in session:
-        song_path = 'static/song' + str(session['user_id']) + '.wav'
+        song_path = 'static/user_files/user' + str(session['user_id']) + '/temp/temp_song.wav'
         if os.path.exists(song_path):
             os.remove(song_path)
 
@@ -106,17 +108,26 @@ def save_song():
         return ''
 
     name = request.form.get('name')
+    image_data = request.form.get('image')
+
     song = Song(user_id=session['user_id'], name=name)
 
     db.session.add(song)
     db.session.flush()
 
-    path = 'static/music/'
-    filename = 'song' + str(song.song_id) + '.wav'
+    path = 'static/user_files/user%i/' % (session['user_id'])
 
-    save_file(path, filename, session['user_id'])
+    music_path = path + 'music/'
+    image_path = path + 'scores/'
 
-    song.song_path = path + filename
+    music_file = 'song' + str(song.song_id) + '.wav'
+    image_file = 'song_score' + str(song.song_id) + '.png'
+
+    save_file(music_path, music_file, session['user_id'])
+    save_image(image_path, image_file, image_data)
+
+    song.song_path = music_path + music_file
+    song.score_path = image_path + image_file
     db.session.commit()
     return ''
 
