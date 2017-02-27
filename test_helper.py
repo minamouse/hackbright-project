@@ -1,33 +1,62 @@
-from helper import save_file, new_song
+from helper import save_file, new_song, save_image, combine_notes_and_chords
+from music21 import stream, note
 import unittest
+import shutil
 import os
 
 
 class TestHelpers(unittest.TestCase):
 
+    def setUp(self):
+
+        # create files
+        os.makedirs('static/user_files/usertest/temp')
+        open('static/user_files/usertest/temp/temp_song.wav', 'a').close()
+
+    def tearDown(self):
+
+        # delete files
+        shutil.rmtree('static/user_files/usertest')
+
     def test_new_song(self):
-        # for some reason this test only passes if the other test is commented out
 
-        os.remove('static/song.mid')
-        os.remove('static/song.wav')
+        melody = 'C4'
+        results = new_song(melody, 'test')
 
-        truth = new_song("C5")
-
-        assert os.path.exists('static/song.mid')
-        assert os.path.exists('static/song.wav')
+        self.assertEqual(results[0], [melody])
+        self.assertTrue(os.path.exists('static/user_files/usertest/temp/temp_song.wav'))
+        self.assertTrue(os.path.exists('static/user_files/usertest/temp/temp_song.mid'))
 
     def test_save_file(self):
 
-        open('static/song.wav', 'a').close()
+        path = 'static/user_files/usertest/music/'
+        filename = 'song.wav'
+        user_id = 'test'
+        save_file(path, filename, user_id)
 
-        path = 'static/test/'
-        songname = 'song.wav'
+        self.assertTrue(os.path.exists(path + filename))
 
-        save_file(path, songname)
-        assert os.path.exists('static/test/song.wav')
+    def test_save_image(self):
 
-        os.remove('static/test/song.wav')
-        os.rmdir('static/test')
+        image = 'data:image/png;base64,iVBORw='
+        path = 'static/user_files/usertest/scores/'
+        filename = 'song_score1.png'
+
+        save_image(path, filename, image)
+
+        self.assertTrue(os.path.exists(path + filename))
+
+    def test_combine_notes_chords(self):
+
+        melody = stream.Stream()
+
+        n = note.Note('C4')
+        n2 = note.Note('C4')
+        melody.append(n)
+        melody.append(n2)
+
+        result = combine_notes_and_chords(melody, [['C3', 'rest']])
+        self.assertEqual(type(result), stream.Stream)
 
 if __name__ == '__main__':
     unittest.main()

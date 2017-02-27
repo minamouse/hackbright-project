@@ -1,6 +1,7 @@
 from flask import Flask, render_template, redirect, request, session, jsonify
 from model import User, Song, db, connect_to_db
 from helper import new_song, save_file, save_image
+import shutil
 import os
 
 app = Flask(__name__)
@@ -149,9 +150,8 @@ def delete_song():
 def delete_profile():
     """Deletes users profile."""
 
-    songs = Song.query.filter_by(user_id=session['user_id']).all()
-    for song in songs:
-        os.remove(song.song_path)
+    user_path = 'static/user_files/user' + str(session['user_id'])
+    shutil.rmtree(user_path)
 
     Song.query.filter_by(user_id=session['user_id']).delete()
     User.query.filter_by(user_id=session['user_id']).delete()

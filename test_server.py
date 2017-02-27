@@ -15,14 +15,6 @@ class TestServerUser(unittest.TestCase):
             with c.session_transaction() as sess:
                 sess['user_id'] = 1
 
-    def test_index_user(self):
-
-        result = self.client.get('/')
-
-        self.assertEqual(result.status_code, 200)
-        self.assertIn('Name it before you save it', result.data)
-        self.assertIn('logout', result.data)
-
     def test_logout(self):
 
         result = self.client.get('/logout', follow_redirects=True)
@@ -62,6 +54,11 @@ class TestServerNoUser(unittest.TestCase):
         self.assertEqual(result.status_code, 200)
         self.assertNotIn('Your saved songs', result.data)
         self.assertIn('Name it before you save it', result.data)
+
+    def test_save_no_user(self):
+
+        result = self.client.get('/save')
+        self.assertEqual(result.status_code, 405)
 
 
 class TestServerWithDB(unittest.TestCase):
@@ -116,6 +113,14 @@ class TestServerWithUserAndDB(unittest.TestCase):
 
         db.session.close()
         db.drop_all()
+
+    def test_index_user(self):
+
+        result = self.client.get('/')
+
+        self.assertEqual(result.status_code, 200)
+        self.assertIn('Name it before you save it', result.data)
+        self.assertIn('logout', result.data)
 
     def test_profile_user(self):
 

@@ -6,33 +6,33 @@ import subprocess
 import os
 
 
-def transpose_back(piece, key):
+# def transpose_back(piece, key):
 
-    current_note = piece.analyze('key')
-    current_note = note.Note(current_note.name[0])
+#     current_note = piece.analyze('key')
+#     current_note = note.Note(current_note.name[0])
 
-    goal_note = note.Note(key.name[0])
+#     goal_note = note.Note(key.name[0])
 
-    transpose_intvl = interval.notesToInterval(current_note, goal_note)
-    transposed_piece = piece.transpose(transpose_intvl)
+#     transpose_intvl = interval.notesToInterval(current_note, goal_note)
+#     transposed_piece = piece.transpose(transpose_intvl)
 
-    notes = []
-    for note1 in transposed_piece[0]:
-        notes.append(note1.nameWithOctave)
+#     notes = []
+#     for note1 in transposed_piece[0]:
+#         notes.append(note1.nameWithOctave)
 
-    chords = []
+#     chords = []
 
-    for chord1 in transposed_piece[1]:
-        chord = []
-        if type(chord1) == note.Rest:
-            chord = 'r'
-        else:
-            for c_note in chord1.pitches:
-                chord.append(c_note.nameWithOctave)
+#     for chord1 in transposed_piece[1]:
+#         chord = []
+#         if type(chord1) == note.Rest:
+#             chord = 'r'
+#         else:
+#             for c_note in chord1.pitches:
+#                 chord.append(c_note.nameWithOctave)
 
-        chords.append(chord)
+#         chords.append(chord)
 
-    return transposed_piece, notes, chords
+#     return transposed_piece, notes, chords
 
 
 def combine_notes_and_chords(melody, chords):
@@ -81,7 +81,6 @@ def new_song(melody, user_id=''):
 
     # convert to .wav format
     subprocess.call(['timidity ' + mid + ' -Ow -o ' + wav], shell=True)
-    print notes, chords
     return notes, chords
 
 
@@ -91,8 +90,6 @@ def save_file(path, filename, user_id=None):
 
     if not os.path.exists(path):
         os.makedirs(path)
-
-    print path, filename
 
     os.rename('static/user_files/user' + str(user_id) + '/temp/temp_song.wav', path + filename)
 
