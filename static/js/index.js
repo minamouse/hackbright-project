@@ -148,7 +148,6 @@ $('#stop').on('click', function() {
 
 $('#mel_submit').on('click', function(evt){
     evt.preventDefault();
-    // $('#boo').replaceWith('<div id="boo" class="img-rounded" style="text-align: center; background: rgba(255,255,255,0.7); margin-left: auto; margin-right: auto;"><canvas width="500" height="230"></canvas></div>');
 
     $('.b').attr('disabled', true);
     var melody = $('#melody').val();
