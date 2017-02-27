@@ -3,3 +3,4 @@ venv/
 secrets.sh
 .DS_Store
 static/user_files
+.coverage
