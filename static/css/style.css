@@ -1,17 +1,22 @@
 body {
     background-size: 100%;
-    background-color: #367ABD;
+    background-color: #FFFFFF;
 }
 
-nav {
+/*nav {
     opacity: 0.8;
-}
+}*/
 
 .navbar{
-    background-color: #6BCCFF;
-    border-color: #6BCCFF;
+    background-color: #ffffff;
+    border-color: #ffffff;
 }
 
+#white-keys {
+    position: absolute;
+    height: 300px;
+    width: 1260px;
+}
 
 #white-keys div {
     display: inline-block;
@@ -21,6 +26,14 @@ nav {
     border-style: solid;
     border-color: grey;
     border-width: 1px;
+}
+
+#black-keys {
+    position: absolute;
+    height: 230px;
+    left: 40px;
+    width: 1180px;
+    pointer-events: none;
 }
 
 #black-keys div{
@@ -58,3 +71,58 @@ nav {
     width: 40px;
     margin-left: 10px;
 }
+
+/*#canvas_outer_div {
+    margin-right: 0;
+    padding-right: 0;
+}*/
+
+
+#canvas_inner_div {
+    overflow: hidden;
+    text-align: center;
+    overflow-x: auto;
+}
+
+
+#keyboard {
+    padding: 20px;
+    overflow: hidden;
+    margin-top: 20px;
+}
+
+#inner_keyboard {
+    position: relative;
+    overflow-x:auto;
+    height: 340px;
+    background: rgba(0,0,0,0.8);
+    max-width: 1260px;
+}
+
+.titles {
+    text-align: center;
+}
+
+.song_card {
+    display: inline-block;
+    overflow: hidden;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.second_color {
+    background: rgba(52,181,226,0.6);
+}
+
+.accent_color {
+    color: #faaa20;
+}
+
+.accent_button {
+    background-color: #faaa20;
+}
+
+
+
+
+
