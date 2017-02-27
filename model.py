@@ -43,7 +43,7 @@ def test_data():
     """
 
     user = User(username='username', password='password')
-    song = Song(user_id=1, name='song', song_path='static/music/song1.wav')
+    song = Song(user_id=1, name='song', song_path='static/user_files/user1/music/song1.wav')
 
     db.session.add(user)
     db.session.commit()

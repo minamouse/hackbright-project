@@ -110,6 +110,7 @@ def save_song():
 
     name = request.form.get('name')
     image_data = request.form.get('image')
+    print image_data
 
     song = Song(user_id=session['user_id'], name=name)
 
