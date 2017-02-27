@@ -2,15 +2,15 @@
 
 {% block body %}
 
-<h1 style="color: white; text-align: center;">{{ username }}</h1>
+<h1 class="titles accent_color">{{ username }}</h1>
 
-<h2 style="color: white; margin: 20px;">Your saved songs:</h2>
+<h2 class="titles accent_color">Your saved songs:</h2>
 
 {% for song in songs %}
 
-  <div class="img-rounded col-xs-12 col-sm-8 col-sm-offset-2" style="background: rgba(149,236,214,0.8); display: inline-block; overflow: hidden; margin-top: 20px; margin-bottom: 20px;">
+  <div class="song_card second_color img-rounded col-xs-12 col-sm-8 col-sm-offset-2">
 
-    <div style="text-align: center;">
+    <div class="titles">
       <h3>{{ song.name }}</h3>
       <div style="text-align: center; overflow-x: auto;">
         <img src={{ song.score_path }}>
