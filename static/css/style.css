@@ -1,6 +1,6 @@
 body {
     background-size: 100%;
-    background-color: #FFFFFF;
+    background-color: #ffffff;
 }
 
 /*nav {
@@ -9,7 +9,7 @@ body {
 
 .navbar{
     background-color: #ffffff;
-    border-color: #ffffff;
+    border-width: 0px;
 }
 
 #white-keys {
@@ -111,18 +111,21 @@ body {
 }
 
 .second_color {
-    background: rgba(52,181,226,0.6);
+    background: #c2d4d8;
 }
 
 .accent_color {
-    color: #faaa20;
+    color: #dbe9d8;
 }
 
 .accent_button {
-    background-color: #faaa20;
+    background-color: #dbe9d8;
 }
 
-
+.b {
+    background-color: #b0aac2;
+    border-width: 0px;
+}
 
 
 
