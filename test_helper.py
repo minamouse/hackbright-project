@@ -1,4 +1,4 @@
-from helper import save_file, new_song, save_image, combine_notes_and_chords
+from helper import save_file, new_song, save_image, combine_notes_and_chords, parse_melody
 from music21 import stream, note
 import unittest
 import shutil
@@ -57,6 +57,14 @@ class TestHelpers(unittest.TestCase):
 
         result = combine_notes_and_chords(melody, [['C3', 'rest']])
         self.assertEqual(type(result), stream.Stream)
+
+    def test_parse_melody(self):
+
+        result = parse_melody('C4 rest')
+
+        self.assertEqual(type(result[0]), stream.Part)
+        self.assertEqual(result[1], [0, 12])
+        self.assertEqual(result[2], ['C4', 'r'])
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,26 +1,4 @@
-from music21 import stream, note, interval
-from music21.pitch import PitchException
-
-
-def parse_melody(melody):
-    """Takes in a string of note names and returns a music21 object.
-    """
-    piece = stream.Part()
-    numbers = []
-    notes = []
-
-    for item in melody.split():
-        try:
-            n = note.Note(item)
-            piece.append(n)
-            numbers.append(n.pitch.midi % 12)
-            notes.append(n.nameWithOctave)
-        except PitchException:
-            piece.append(note.Rest(item))
-            numbers.append(12)
-            notes.append('r')
-
-    return piece, numbers, notes
+from music21 import note, interval
 
 
 def to_scale_degrees(piece):

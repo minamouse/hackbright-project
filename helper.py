@@ -1,9 +1,29 @@
-from parse_music import parse_melody
-from music21 import midi, interval, note, stream, chord
+from music21 import midi, note, stream, chord
 from music21.pitch import PitchException
 from random_forest import add_chords
 import subprocess
 import os
+
+
+def parse_melody(melody):
+    """Takes in a string of note names and returns a music21 object.
+    """
+    piece = stream.Part()
+    numbers = []
+    notes = []
+
+    for item in melody.split():
+        try:
+            n = note.Note(item)
+            piece.append(n)
+            numbers.append(n.pitch.midi % 12)
+            notes.append(n.nameWithOctave)
+        except PitchException:
+            piece.append(note.Rest(item))
+            numbers.append(12)
+            notes.append('r')
+
+    return piece, numbers, notes
 
 
 # def transpose_back(piece, key):
