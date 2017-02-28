@@ -187,9 +187,10 @@ $('#name_submit').on('click', function(evt){
     });
 });
 
-var add_note = function(source) {
+var add_note = function(source, length) {
     var note = source.split('/')[2].split('.')[0];
     note = note.replace('s', '#');
+    note += '\\' + length;
     var text = $('#melody').val();
     if (text === '') {
         $('#melody').val(note);
@@ -203,7 +204,7 @@ $('#white-keys div').on('mousedown', function(event) {
     key.css('border-width', '2px');
     var audio = key.children();
 
-    add_note(audio.attr('src'));
+    add_note(audio.attr('src'), $('.selected_rhythm').attr('value'));
 
     audio[0].currentTime = 0;
     audio[0].play();
@@ -218,7 +219,7 @@ $('#black-keys div').on('mousedown', function(event) {
     key.css('border', 'solid 1px grey');
     var audio = key.children();
 
-    add_note(audio.attr('src'));
+    add_note(audio.attr('src'), $('.selected_rhythm').attr('value'));
 
     audio[0].currentTime = 0;
     audio[0].play();
@@ -233,8 +234,12 @@ $('#clear_text').on('click', function() {
 });
 
 
+var rhythm_buttons = $('.rhythms');
 
-
+rhythm_buttons.on('click', function(event) {
+    rhythm_buttons.removeClass('selected_rhythm');
+    $(event.target).addClass('selected_rhythm');
+});
 
 
 

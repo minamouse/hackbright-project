@@ -84,7 +84,6 @@ body {
 #keyboard {
     padding: 20px;
     overflow: hidden;
-    margin-top: 20px;
 }
 
 #inner_keyboard {
@@ -118,4 +117,18 @@ body {
     background-color: #f58db6;
 }
 
+.selected_rhythm {
+    background-color: rgb(129,252,173);
+}
 
+.selected_rhythm:hover {
+    background-color: rgb(129, 252, 173);
+}
+
+.selected_rhythm:active {
+    background-color: rgb(129, 252, 173);
+}
+
+.selected_rhythm:focus {
+    background-color: rgb(129, 252, 173);
+}
