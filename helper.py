@@ -1,6 +1,6 @@
 from music21 import midi, note, stream, chord
 from music21.pitch import PitchException
-from random_forest import add_chords
+from gnaive_bayes import add_chords
 import subprocess
 import os
 

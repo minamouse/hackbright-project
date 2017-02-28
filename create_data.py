@@ -168,7 +168,7 @@ if __name__ == '__main__':
             'music_files/corelli', 'music_files/haydn', 'music_files/hummel',
             'music_files/vivaldi', 'music_files/buxtehude']
 
-    for d in dirs[:1]:
+    for d in dirs:
         print 'parsing files'
         all_dataframes.extend(parse_all_files())
 
