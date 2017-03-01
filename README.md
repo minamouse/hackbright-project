@@ -1,22 +1,18 @@
-# hackbright-project
+# harmonize
 
-## Generating accompaniment to a given melody
+### About
+Harmonize is a web app that generates an accompaniment to any melody you play. It has a simple, user-friendly interface and displays its results as music notation as well as an audio file you can listen to. Behind the scenes, it is using machine learning to learn and predict the next chord based on the notes you provided!
 
+### Installation
 
-#### Setting it up:
-
-* set up virtual environment
-* ``` pip install -r requirements.txt ```
-* ``` sudo apt install timidity ```
-* add a variable SECRET_KEY to environment
-* ``` createdb project ```
-* ``` python model.py ```
-* ``` python server.py ```
-* go to localhost:5000
-
-#### Input:
-
-* note names with octaves
-* space-separated
-* - is for flats
-* try this: C5 C5 G5 G5 A5 A5 G5
+install postgresql
+clone the repo
+virtualenv venv
+source venv/bin/activate
+pip install -r requirements.txt
+sudo apt install timidity
+export SECRET_KEY='key'
+dropdb project
+createdb project
+python model.py
+python server.py
