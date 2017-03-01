@@ -3,6 +3,11 @@ from pandas import DataFrame
 import pickle
 
 
+notes_to_chords = {}
+chords_to_chords = {}
+next_notes_to_chords = {}
+
+
 def parse_song(path):
 
     try:
@@ -31,37 +36,62 @@ def parse_song(path):
         measure.transferOffsetToElements()
         for event in measure:
             if type(event) == chord.Chord:
-                print dir(event)
-                accompaniment[event.offset] = event
+                accompaniment[event.offset] = ' '.join(sorted(list(set([p.name for p in event.pitches]))))
 
     df = DataFrame([melody, accompaniment]).T.dropna()
     return df
 
 
-def dataframe_to_features(df, giant_dictionary):
+def dataframe_to_features(df):
 
     for i in range(len(df)-1):
-        features = ' '.join([df.loc[df.index[i]][0], df.loc[df.index[i]][1], df.loc[df.index[i+1]][0]])
-        label = df.loc[df.index[i+1]][1]
-        if features in giant_dictionary:
-            giant_dictionary[features].append(label)
-        else:
-            giant_dictionary[features] = [label]
 
-    return giant_dictionary
+        note = df.loc[df.index[i]][0]
+        chord = df.loc[df.index[i]][1]
+        next_chord = df.loc[df.index[i+1]][1]
+        next_note = df.loc[df.index[i+1]][0]
+
+        if note in notes_to_chords:
+            notes_to_chords[note].append(chord)
+        else:
+            notes_to_chords[note] = [chord]
+
+        if chord in chords_to_chords:
+            chords_to_chords[chord].append(next_chord)
+        else:
+            chords_to_chords[chord] = [next_chord]
+
+        if next_note in next_notes_to_chords:
+            next_notes_to_chords[next_note].append(chord)
+        else:
+            next_notes_to_chords[next_note] = [chord]
+
+    i += 1
+    note = df.loc[df.index[i]][0]
+    chord = df.loc[df.index[i]][1]
+
+    if note in notes_to_chords:
+        notes_to_chords[note].append(chord)
+    else:
+        notes_to_chords[note] = [chord]
+
+    if 'end' in next_notes_to_chords:
+        next_notes_to_chords['end'].append(chord)
+    else:
+        next_notes_to_chords['end'] = [chord]
 
 
 if __name__ == '__main__':
 
-    giant_dictionary = {}
-
-    paths = corpus.getComposer('bach')[:20]
-    for path in paths:
-
+    paths = corpus.getComposer('bach')[:-20]
+    for path in paths[:20]:
         print '***Parsing', path[94:] + '***'
 
         # strip off the extra folder names in the path name
         df = parse_song(path[94:])
-        giant_dictionary = dataframe_to_features(df, giant_dictionary)
+        if df is not None:
+            dataframe_to_features(df)
 
-    pickle.dump(giant_dictionary, open('data.p', 'w'))
+    pickle.dump(notes_to_chords, open('notes_to_chords.p', 'w'))
+    pickle.dump(chords_to_chords, open('chords_to_chords.p', 'w'))
+    pickle.dump(next_notes_to_chords, open('next_notes_to_chords.p', 'w'))
