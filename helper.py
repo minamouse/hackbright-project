@@ -33,7 +33,6 @@ def all_info(notes):
         feat = [new_notes[i], new_notes[i+1], new_notes[i+2]]
         all_features.append(feat)
 
-    stuff(all_features)
     return all_features
 
 
@@ -61,35 +60,6 @@ def parse_melody(melody):
             piece.append(note.Rest(item))
 
     return piece, notes
-
-
-# def transpose_back(piece, key):
-
-#     current_note = piece.analyze('key')
-#     current_note = note.Note(current_note.name[0])
-
-#     goal_note = note.Note(key.name[0])
-
-#     transpose_intvl = interval.notesToInterval(current_note, goal_note)
-#     transposed_piece = piece.transpose(transpose_intvl)
-
-#     notes = []
-#     for note1 in transposed_piece[0]:
-#         notes.append(note1.nameWithOctave)
-
-#     chords = []
-
-#     for chord1 in transposed_piece[1]:
-#         chord = []
-#         if type(chord1) == note.Rest:
-#             chord = 'r'
-#         else:
-#             for c_note in chord1.pitches:
-#                 chord.append(c_note.nameWithOctave)
-
-#         chords.append(chord)
-
-#     return transposed_piece, notes, chords
 
 
 def combine_notes_and_chords(melody, chords):
