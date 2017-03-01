@@ -1,45 +1,18 @@
 from music21 import midi, note, stream, chord, duration
 from music21.pitch import PitchException
-from random_forest import add_chords
-from run_ml import stuff
+from markov_model import add_chords
 import subprocess
 import os
 
-
 rhythms = {
-    'q': 1,
+    'q': 1.0,
     '.q': 1.5,
-    'w': 4,
-    'h': 2,
-    '.h': 3,
+    'w': 4.0,
+    'h': 2.0,
+    '.h': 3.0,
     '8': 0.5,
     '16': 0.25
 }
-
-
-def all_info(notes):
-
-    new_notes = ['begin']
-
-    for n in notes:
-        name, dur = n.split('\\')
-        f = '/'.join([name, str(rhythms[dur])])
-        new_notes.append(f)
-
-    new_notes.append('end')
-
-    all_features = []
-    for i in range(len(new_notes)-2):
-        feat = [new_notes[i], new_notes[i+1], new_notes[i+2]]
-        all_features.append(feat)
-
-    return all_features
-
-
-def make_features(notes, method='all_info'):
-
-    if method == 'all_info':
-        return all_info(notes)
 
 
 def parse_melody(melody):
@@ -49,10 +22,10 @@ def parse_melody(melody):
     notes = []
 
     for item in melody.split():
-        notes.append(item)
         try:
             n, d = item.split('\\')
             n = note.Note(n)
+            notes.append(n.name)
             dur = duration.Duration(rhythms[d])
             n.duration = dur
             piece.append(n)
@@ -92,13 +65,7 @@ def new_song(melody, user_id=''):
 
     # turn melody string into music21 object and transpose
     parsed_input, notes = parse_melody(melody)
-    make_features(notes)
     chords = add_chords(notes)
-
-    for x in range(len(chords)):
-        for n in range(len(chords[x])):
-            if chords[x][n] != 'r':
-                chords[x][n] += '3'
 
     song = combine_notes_and_chords(parsed_input, chords)
     # write to midi file
