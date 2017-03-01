@@ -1,5 +1,11 @@
-from music21 import converter, chord, stream, note
+from music21 import corpus, chord, stream, note
 from pandas import DataFrame
+import pickle
+
+
+names_to_numbers = {}
+numbers_to_names = {}
+
 
 
 def parse_file(song_path):
@@ -12,124 +18,120 @@ def parse_file(song_path):
     """
 
     try:
-        song = converter.parse(song_path)
+        song = corpus.parse(song_path)
     except:
         print song_path, "wasn't parsed"
         return
 
-    # chords = song.chordify()
-    # all_events = {}
-
-    # for measure in chords.getElementsByClass(stream.Measure):
-    #     measure.transferOffsetToElements()
-    #     for event in measure:
-    #         if type(event) == chord.Chord:
-    #             print event.offset, event.duration.quarterLength,
-    #             chord_notes = [p.nameWithOctave for p in sorted(event.pitches, key=lambda p: -p.midi)]
-    #             melody = chord_notes[0]
-    #             accomp = chord.Chord(chord_notes[1:]).closedPosition(forceOctave=3)
-    #             accomp = [p.nameWithOctave for p in sorted(accomp.pitches, key=lambda p: -p.midi)]
-    #             all_events[event.offset] = [event.duration.quarterLength, melody, chord_notes[1:], accomp]
-
-    # df = DataFrame(all_events)
-    # print df.T
+    chords = song.chordify()
 
     parts = [p for p in song.getElementsByClass(stream.Part)]
     melody = {}
     for measure in parts[0].getElementsByClass(stream.Measure):
         measure.transferOffsetToElements()
         for event in measure:
-            if type(event) == note.Note:
-                melody[event.offset] = event.name, event.duration.quarterLength
-            elif type(event) == note.Rest:
-                melody[event.offset] = 'r', event.duration.quarterLength
-            elif type(event) == chord.Chord:
-                chord_notes = sorted(event.pitches, key=lambda p: -p.midi)
-                melody[event.offset] = [p.name for p in chord_notes], event.duration.quarterLength
+            if event.offset % 1 == 0:
+                if type(event) == note.Note:
+                    melody[event.offset] = event.name + '/' + str(event.duration.quarterLength)
+                elif type(event) == note.Rest:
+                    melody[event.offset] = 'r' + '/' + str(event.duration.quarterLength)
+                elif type(event) == chord.Chord:
+                    chord_notes = sorted(event.pitches, key=lambda p: -p.midi)
+                    melody[event.offset] = chord_notes[0].name + '/' + str(event.duration.quarterLength)
 
     accompaniment = {}
-    for part in parts[1:]:
-        for measure in part.getElementsByClass(stream.Measure):
-            measure.transferOffsetToElements()
+    for measure in chords.getElementsByClass(stream.Measure):
+        measure.transferOffsetToElements()
+        if event.offset % 1 == 0:
             for event in measure:
                 event_name = []
-                if type(event) == note.Note:
-                    event_name = [event.name]
-                elif type(event) == note.Rest:
-                    event_name = ['r']
-                elif type(event) == chord.Chord:
-                    event_name = [p.name for p in event.pitches]
-
-                if event.offset in accompaniment:
-                    accompaniment[event.offset].extend(event_name)
-                else:
+                if type(event) == chord.Chord:
+                    event_name = event.root().name + ' ' + event.quality
                     accompaniment[event.offset] = event_name
 
-    for offset in accompaniment:
-        new_chord = chord.Chord(accompaniment[offset])
-        notes = [n.name for n in new_chord.closedPosition().pitches]
-        accompaniment[offset] = notes
-    df = DataFrame([melody, accompaniment]).T
-    # df[1] = df[df.columns[1:]].apply(lambda x: ','.join(x.dropna().astype(int).astype(str)), axis=1)
-    print df
-    # for part in song.getElementsByClass(stream.Part):
-    #     part_dict = {}
-    #     for measure in part.getElementsByClass(stream.Measure):
-    #         measure.transferOffsetToElements()
-    #         for event in measure:
-    #             if type(event) == note.Note:
-    #                 part_dict[event.offset] = event.name, event.duration.quarterLength
-    #             elif type(event) == note.Rest:
-    #                 part_dict[event.offset] = 'r'
-    #             elif type(event) == chord.Chord:
-    #                 part_dict[event.offset] = [p.nameWithOctave for p in event.pitches]
+    df = DataFrame([melody, accompaniment]).T.dropna()
+    return df
 
-    #     parts.append(part_dict)
 
-    # df = DataFrame(parts).T.dropna(subset=[0]).fillna('continue')
-    # print df
+def dataframe_to_features(df):
 
-    # data = []
-    # for x in df.columns:
-    #     data.append(df[x].tolist())
+    features = []
 
-    # melody = []
-    # rest = []
-    # for el in zip(*data):
-    #     accomp = []
-    #     if type(el[0]) == list:
-    #         high_note = max(el[0])
-    #         remaining = [e for e in el[0] if e != high_note]
-    #         melody.append(high_note)
-    #         accomp.extend(remaining)
-    #     else:
-    #         melody.append(el[0])
+    if len(df) >= 2:
+        feat = ['begin', 'begin', df.loc[df.index[0]][0], df.loc[df.index[1]][0]]
+        features.append(feat)
 
-    #     for x in range(1, len(el)):
-    #         if type(el[x]) == list:
-    #             accomp.extend(el[x])
-    #         else:
-    #             accomp.append(el[x])
+        labels = [df.loc[df.index[0]][1]]
+        i = 0
+        for i in range(len(df.index)-2):
+            feat = []
+            feat.append(df.loc[df.index[i]][0])
+            feat.append(df.loc[df.index[i]][1])
+            feat.append(df.loc[df.index[i+1]][0])
+            feat.append(df.loc[df.index[i+2]][0])
 
-    #     accomp = set(accomp)
-    #     if 'r' in accomp and len(accomp) > 1:
-    #         accomp.remove('r')
-    #     rest.append(sorted(list(accomp)))
+            features.append(feat)
 
-    # new_rest = []
-    # for r in rest:
-    #     new_rest.append(convert_to_vector(r))
+            labels.append(df.loc[df.index[i+1]][1])
 
-    # begin_vector = [0 for x in range(15)]
-    # begin_vector[13] = 1
-    # end_vector = [0 for x in range(15)]
-    # end_vector[14] = 1
-    # melody.insert(0, 13)
-    # melody.append(14)
-    # new_rest.insert(0, begin_vector)
-    # new_rest.append(end_vector)
+        i += 1
+        feat = [df.loc[df.index[i]][0], df.loc[df.index[i]][1], df.loc[df.index[i+1]][0], 'end']
+        features.append(feat)
+        labels.append(df.loc[df.index[i+1]][1])
 
-    # new_df = DataFrame([melody, new_rest]).T
-    # return new_df.fillna('r')
+        return features, labels
 
-parse_file('music_files/corelli/op01n01a.krn')
+
+all_dataframes = []
+
+all_features = []
+all_labels = []
+
+for p in corpus.getComposer('bach')[:29]:
+    path = p[94:]
+    print path
+    all_dataframes.append(parse_file(path))
+
+x = 0
+for df in all_dataframes:
+    print x, len(all_dataframes)
+    x += 1
+    results = dataframe_to_features(df)
+    if results:
+        features, labels = results
+        all_features.extend(features)
+        all_labels.extend(labels)
+
+number_labels = []
+current_num = 0
+for label in all_labels:
+
+    if label not in names_to_numbers:
+        names_to_numbers[label] = current_num
+        numbers_to_names[current_num] = label
+        current_num += 1
+
+    number_labels.append(names_to_numbers[label])
+
+number_features = []
+for features in all_features:
+    new_features = []
+    for f in features:
+        if f not in names_to_numbers:
+            names_to_numbers[f] = current_num
+            numbers_to_names[current_num] = f
+            current_num += 1
+
+        new_features.append(names_to_numbers[f])
+    number_features.append(new_features)
+
+
+pickle.dump(number_features, open('number_features.p', 'w'))
+pickle.dump(number_labels, open('number_labels.p', 'w'))
+pickle.dump(names_to_numbers, open('names_to_numbers.p', 'w'))
+pickle.dump(numbers_to_names, open('numbers_to_names.p', 'w'))
+
+# this will work well for list of notes, but not for named chords (major/minor)
+# for p in corpus.getComposer('ryansMammoth'):
+#     path = p[94:]
+#     parse_file(path)
