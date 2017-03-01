@@ -1,29 +1,66 @@
-from music21 import midi, note, stream, chord
+from music21 import midi, note, stream, chord, duration
 from music21.pitch import PitchException
-from gnaive_bayes import add_chords
+from random_forest import add_chords
+from run_ml import stuff
 import subprocess
 import os
+
+
+rhythms = {
+    'q': 1,
+    '.q': 1.5,
+    'w': 4,
+    'h': 2,
+    '.h': 3,
+    '8': 0.5,
+    '16': 0.25
+}
+
+
+def all_info(notes):
+
+    new_notes = ['begin']
+
+    for n in notes:
+        name, dur = n.split('\\')
+        f = '/'.join([name, str(rhythms[dur])])
+        new_notes.append(f)
+
+    new_notes.append('end')
+
+    all_features = []
+    for i in range(len(new_notes)-2):
+        feat = [new_notes[i], new_notes[i+1], new_notes[i+2]]
+        all_features.append(feat)
+
+    stuff(all_features)
+    return all_features
+
+
+def make_features(notes, method='all_info'):
+
+    if method == 'all_info':
+        return all_info(notes)
 
 
 def parse_melody(melody):
     """Takes in a string of note names and returns a music21 object.
     """
     piece = stream.Part()
-    numbers = []
     notes = []
 
     for item in melody.split():
+        notes.append(item)
         try:
-            n = note.Note(item)
+            n, d = item.split('\\')
+            n = note.Note(n)
+            dur = duration.Duration(rhythms[d])
+            n.duration = dur
             piece.append(n)
-            numbers.append(n.pitch.midi % 12)
-            notes.append(n.nameWithOctave)
         except PitchException:
             piece.append(note.Rest(item))
-            numbers.append(12)
-            notes.append('r')
 
-    return piece, numbers, notes
+    return piece, notes
 
 
 # def transpose_back(piece, key):
@@ -84,8 +121,9 @@ def new_song(melody, user_id=''):
     wav = path + 'temp_song.wav'
 
     # turn melody string into music21 object and transpose
-    parsed_input, numbers, notes = parse_melody(melody)
-    chords = add_chords(numbers)
+    parsed_input, notes = parse_melody(melody)
+    make_features(notes)
+    chords = add_chords(notes)
 
     for x in range(len(chords)):
         for n in range(len(chords[x])):
