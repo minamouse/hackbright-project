@@ -1,24 +1,47 @@
 'use strict';
 
 var draw_piece = function (notes, chords) {
+
     var convert_note = function(note){
-        if (note.length == 2) {
-            var key = note[0].toLowerCase() + '/' + note[1];
+
+        var key;
+        var accid;
+        var dur = note[1];
+
+        if (note[0].length == 2) {
+            var key = note[0][0].toLowerCase() + '/' + note[0][1];
             var accid = '0';
         } else {
-            if (note === 'r') {
-                var key = 'r';
-                var accid = '0';
+            if (note[0] === 'r') {
+                key = 'b/4';
+                accid = '0';
+                dur = dur + 'r';
             } else {
-                var key = note[0].toLowerCase() + '/' + note[2];
-                var accid = note[1];
+                var key = note[0][0].toLowerCase() + '/' + note[0][2];
+                var accid = note[0][1];
                 if (accid == '-') {
                     accid = 'b';
                 }
             }
         }
-        return [key, accid];
+        return [key, accid, dur];
     };
+
+
+    var convert_chord = function(chord){
+
+        var keys = [];
+        var accids = [];
+        var dur = chord[1];
+
+        for (var i = 0; i < chord[0].length; i++){
+            var results = convert_note([chord[0][i], 'q']);
+            keys.push(results[0]);
+            accids.push(results[1]);
+        }
+
+        return [keys, accids, dur];
+    }
 
     // stuff that just has to be done
     var VF = Vex.Flow;
@@ -27,94 +50,78 @@ var draw_piece = function (notes, chords) {
     var ctx = renderer.getContext();
     var formatter = new VF.Formatter();
 
-    var new_notes = [];
-    var note_accids = [];
-    for (var i = 0; i < notes.length; i++){
-        var results = convert_note(notes[i]);
-        new_notes.push(results[0]);
-        note_accids.push(results[1]);
-    }
-
-    var new_chords = [];
-    var chord_accids = [];
-    for (var i = 0; i < chords.length; i++) {
-        var c = chords[i];
-        var new_c = [];
-        var accids = [];
-        for (var j = 0; j < c.length; j++) {
-            var results = convert_note(c[j]);
-            new_c.push(results[0]);
-            accids.push(results[1]);
-        }
-        new_chords.push(new_c);
-        chord_accids.push(accids);
-    }
-
-    var occurences = new_notes.map(function (e, i) {
-        return [[e], new_chords[i]];
-    });
-
-    var accidentals = note_accids.map(function (e, i) {
-        return [e, chord_accids[i]];
-    });
-
-    var x = occurences.length + (4 - (occurences.length % 4));
     var x_pos = 10;
     var size = 200;
 
-    for (var i = 0; i < x; i+=4) {
-        if (i == 0) {
+    for (var m = 0; m < notes.length; m++){
+        var new_notes = [];
+        var new_chords = [];
+
+        if (m == 0) {
             var stave1 = new VF.Stave(x_pos, 20, size + 50).addClef('treble').addTimeSignature('4/4');
-            var stave2 = new VF.Stave(x_pos, 110, size+ 50).addClef('bass').addTimeSignature('4/4');
+            var stave2 = new VF.Stave(x_pos, 110, size + 50).addClef('bass').addTimeSignature('4/4');
             x_pos += size + 50
         } else {
             var stave1 = new VF.Stave(x_pos, 20, size);
             var stave2 = new VF.Stave(x_pos, 110, size);
             x_pos += size;
         }
+
+        for (var i = 0; i < notes[m].length; i++){
+            var results = convert_note(notes[m][i]);
+            new_notes.push(results);
+        }
+
+        for (var i = 0; i < chords[m].length; i++){
+            var results = convert_chord(chords[m][i]);
+            new_chords.push(results);
+        }
+        
         var voice1 = new VF.Voice({num_beats: 4, beat_value: 4, resolution: Vex.Flow.RESOLUTION}).setMode(3);
         var voice2 = new VF.Voice({num_beats: 4, beat_value: 4, resolution: Vex.Flow.RESOLUTION}).setMode(3);
         var stave1_notes = [];
         var stave2_notes = [];
-        for (var j = i; j < i+4; j++) {
+        for (var j = 0; j < new_notes.length; j++) {
             
-            if (j >= occurences.length) {
-                var note = new VF.GhostNote({clef: 'treble', keys: ['c/4'], duration: 'q'});
-                var chord = new VF.GhostNote({clef: 'bass', keys: ['c/4'], duration: 'q'});
+            // if (j >= occurences.length) {
+            //     var note = new VF.GhostNote({clef: 'treble', keys: ['c/4'], duration: 'q'});
+            //     var chord = new VF.GhostNote({clef: 'bass', keys: ['c/4'], duration: 'q'});
+            // } else {
+
+            if (new_notes[j][1] == '0') {
+                var note = new VF.StaveNote({clef: 'treble', keys: [new_notes[j][0]], duration: new_notes[j][2], auto_stem: true});
             } else {
-                if (occurences[j][0][0] === 'r') {
-                    var note = new VF.StaveNote({clef: 'treble', keys: ['b/4'], duration: 'qr'});
-                } else {
-                    var note = new VF.StaveNote({clef: 'treble', keys: occurences[j][0], duration: 'q', auto_stem: true});
-                }
-                if (occurences[j][1][0] === 'r') {
-                    var chord = new VF.StaveNote({clef: 'bass', keys: ['d/3'], duration: 'qr'});
-                } else {
-                    var chord = new VF.StaveNote({clef: 'bass', keys: occurences[j][1], duration: 'q', auto_stem: true});
-                }
-                if (accidentals[j][0] !== '0') {
-                    note.addAccidental(0, new VF.Accidental(accidentals[j][0]));
-                }
-                for (var l = 0; l < accidentals[j][1].length; l++) {
-                    if (accidentals[j][1][l] !== '0') {
-                        chord.addAccidental(l, new VF.Accidental(accidentals[j][1][l]));
-                    }
-                }
+                var note = new VF.StaveNote({clef: 'treble', keys: [new_notes[j][0]], duration: new_notes[j][2], auto_stem: true});
+                note.addAccidental(0, new VF.Accidental(new_notes[j][1]));
             }
             stave1_notes.push(note);
-            stave2_notes.push(chord);
         }
-        voice1.addTickables(stave1_notes);
-        voice2.addTickables(stave2_notes);
 
-        formatter.format([voice1, voice2], size);
+        // for (var j = 0; j < new_chords.length; j++){
 
-        stave1.setContext(ctx).draw();
-        voice1.draw(ctx, stave1);
+        //     var chord = new VF.StaveNote({clef: 'bass', keys: [new_notes[j][0]], duration: new_notes[j][2], auto_stem: true});
+        //     for (var l = 0; l < new_chords[j][1].length; l++) {
+        //         if (new_chords[j][1][l] !== '0') {
+        //             chord.addAccidental(l, new VF.Accidental(new_chords[j][1][l]));
+        //         }
+        //     }
+        //     stave2_notes.push(chord);
 
-        stave2.setContext(ctx).draw();
-        voice2.draw(ctx, stave2);
+            
+        // }
+
+    voice1.addTickables(stave1_notes);
+    // voice2.addTickables(stave2_notes);
+
+    formatter.format([voice1, voice2], size);
+
+    stave1.setContext(ctx).draw();
+    voice1.draw(ctx, stave1);
+
+    stave2.setContext(ctx).draw();
+    voice2.draw(ctx, stave2);
     }
+
 };
 
 $(function () {
