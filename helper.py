@@ -14,43 +14,91 @@ rhythms = {
     '16': 0.25
 }
 
+rhythms_back = {0.25: '16',
+                1.0: 'q',
+                2.0: 'h',
+                3.0: 'hd',
+                4.0: 'w',
+                0.5: '8',
+                1.5: 'qd'}
+
 
 def parse_melody(melody):
     """Takes in a string of note names and returns a music21 object.
     """
     piece = stream.Part()
-    notes = []
 
-    for item in melody.split():
-        try:
-            n, d = item.split('\\')
-            n = note.Note(n)
-            notes.append(n.name)
-            dur = duration.Duration(rhythms[d])
-            n.duration = dur
-            piece.append(n)
-        except PitchException:
-            piece.append(note.Rest(item))
+    for item in melody:
 
-    return piece, notes
+        dur = duration.Duration(item[1])
+
+        if item[0] != 'r':
+            n = note.Note(item[0])
+        else:
+            n = note.Rest()
+
+        n.duration = dur
+        piece.append(n)
+
+    return piece
 
 
-def combine_notes_and_chords(melody, chords):
+def combine_notes_and_chords(notes, chords):
+
+    piece = stream.Stream()
+    piece.append(notes)
+    piece.append(chords)
+    return piece
+
+
+def make_chords(chords, lengths):
 
     accomp = stream.Part()
 
-    for c_notes in chords:
+    for i in range(len(chords)):
         try:
-            c = chord.Chord(c_notes)
+            c = chord.Chord(chords[i])
+            c.closedPosition(forceOctave=3)
+            d = duration.Duration(lengths[i])
+            c.duration = d
         except PitchException:
             c = note.Rest()
+            d = duration.Duration(lengths[i])
+            c.duration = d
         accomp.append(c)
 
-    piece = stream.Stream()
-    piece.append(melody)
-    piece.append(accomp)
+    return accomp
 
-    return piece
+
+def get_measures(melody, accomp):
+
+    melody_measures = melody.makeMeasures()
+    accomp_measures = accomp.makeMeasures()
+
+    melody_measure_notes = []
+    accomp_measure_notes = []
+
+    for measure in melody_measures:
+        this_measure = []
+        for n in measure.notesAndRests:
+            if type(n) == note.Note:
+                this_measure.append((n.nameWithOctave, rhythms_back[n.duration.quarterLength]))
+            elif type(n) == note.Rest:
+                this_measure.append(('r', n.duration))
+
+        melody_measure_notes.append(this_measure)
+
+    for measure in accomp_measures:
+        this_measure = []
+        for n in measure.notesAndRests:
+            if type(n) == chord.Chord:
+                this_measure.append(([p.nameWithOctave for p in n.pitches], rhythms_back[n.duration.quarterLength]))
+
+        accomp_measure_notes.append(this_measure)
+
+    print melody_measure_notes
+    print accomp_measure_notes
+    return melody_measure_notes, accomp_measure_notes
 
 
 def new_song(melody, user_id=''):
@@ -63,11 +111,21 @@ def new_song(melody, user_id=''):
     mid = path + 'temp_song.mid'
     wav = path + 'temp_song.wav'
 
-    # turn melody string into music21 object and transpose
-    parsed_input, notes = parse_melody(melody)
-    chords = add_chords(notes)
+    new_melody = []
 
-    song = combine_notes_and_chords(parsed_input, chords)
+    for item in melody.split():
+        n, d = item.split('\\')
+        new_melody.append((n, rhythms[d]))
+
+    parsed_input = parse_melody(new_melody)
+    chords, lengths = add_chords(new_melody)
+
+    accomp = make_chords(chords, lengths)
+
+    note_measures, chord_measures = get_measures(parsed_input, accomp)
+
+    song = combine_notes_and_chords(parsed_input, accomp)
+
     # write to midi file
     mf = midi.translate.streamToMidiFile(song)
     mf.open(mid, 'wb')
@@ -76,7 +134,7 @@ def new_song(melody, user_id=''):
 
     # convert to .wav format
     subprocess.call(['timidity ' + mid + ' -Ow -o ' + wav], shell=True)
-    return notes, chords
+    return note_measures, chord_measures
 
 
 def save_file(path, filename, user_id=None):
@@ -101,3 +159,8 @@ def save_image(path, filename, data):
     fh = open(path+filename, "wb")
     fh.write(image.decode('base64'))
     fh.close()
+
+
+def validate_input(melody):
+
+    return True
