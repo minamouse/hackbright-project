@@ -38,10 +38,10 @@ def get_downbeats(melody):
     return chord_notes, chord_lengths
 
 
-def choose_chords(notes):
+def choose_chords(raw_notes):
 
     chords = ['begin']
-    notes.append('end')
+    notes = raw_notes + ['end']
 
     for m in range(len(notes)-1):
 

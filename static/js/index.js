@@ -41,7 +41,7 @@ var draw_piece = function (notes, chords) {
         }
 
         return [keys, accids, dur];
-    }
+    };
 
     // stuff that just has to be done
     var VF = Vex.Flow;
@@ -51,7 +51,10 @@ var draw_piece = function (notes, chords) {
     var formatter = new VF.Formatter();
 
     var x_pos = 10;
-    var size = 200;
+    var size = 250;
+
+    var stave1;
+    var stave2;
 
     for (var m = 0; m < notes.length; m++){
         var new_notes = [];
@@ -60,7 +63,7 @@ var draw_piece = function (notes, chords) {
         if (m == 0) {
             var stave1 = new VF.Stave(x_pos, 20, size + 50).addClef('treble').addTimeSignature('4/4');
             var stave2 = new VF.Stave(x_pos, 110, size + 50).addClef('bass').addTimeSignature('4/4');
-            x_pos += size + 50
+            x_pos += size + 50;
         } else {
             var stave1 = new VF.Stave(x_pos, 20, size);
             var stave2 = new VF.Stave(x_pos, 110, size);
@@ -88,31 +91,37 @@ var draw_piece = function (notes, chords) {
             //     var chord = new VF.GhostNote({clef: 'bass', keys: ['c/4'], duration: 'q'});
             // } else {
 
-            if (new_notes[j][1] == '0') {
-                var note = new VF.StaveNote({clef: 'treble', keys: [new_notes[j][0]], duration: new_notes[j][2], auto_stem: true});
-            } else {
-                var note = new VF.StaveNote({clef: 'treble', keys: [new_notes[j][0]], duration: new_notes[j][2], auto_stem: true});
+            var note = new VF.StaveNote({clef: 'treble', keys: [new_notes[j][0]], duration: new_notes[j][2], auto_stem: true});
+            if (new_notes[j][1] !== '0') {
                 note.addAccidental(0, new VF.Accidental(new_notes[j][1]));
+            }
+            if (new_notes[j][2][1] === 'd') {
+                note.addDotToAll();
             }
             stave1_notes.push(note);
         }
 
-        // for (var j = 0; j < new_chords.length; j++){
+        for (var j = 0; j < new_chords.length; j++){
 
-        //     var chord = new VF.StaveNote({clef: 'bass', keys: [new_notes[j][0]], duration: new_notes[j][2], auto_stem: true});
-        //     for (var l = 0; l < new_chords[j][1].length; l++) {
-        //         if (new_chords[j][1][l] !== '0') {
-        //             chord.addAccidental(l, new VF.Accidental(new_chords[j][1][l]));
-        //         }
-        //     }
-        //     stave2_notes.push(chord);
+            var chord = new VF.StaveNote({clef: 'bass', keys: new_chords[j][0], duration: new_chords[j][2], auto_stem: true});
+            for (var l = 0; l < new_chords[j][1].length; l++) {
+                console.log(new_chords[j][1][l]);
+                if (new_chords[j][1][l] !== '0') {
+                    chord.addAccidental(l, new VF.Accidental(new_chords[j][1][l]));
+                }
+                if (new_notes[j][2][0] == 'd') {
+                    chord.addDotToAll();
+                }
+            }
+            stave2_notes.push(chord);
+        }
 
             
         // }
 
     voice1.addTickables(stave1_notes);
-    // voice2.addTickables(stave2_notes);
-
+    voice2.addTickables(stave2_notes);
+    
     formatter.format([voice1, voice2], size);
 
     stave1.setContext(ctx).draw();
@@ -164,7 +173,7 @@ $('#mel_submit').on('click', function(evt){
 
         // var img_source = 'static/scores/song.svg?random=' + new Date().getTime();
         // $('img').attr('src', img_source);
-        $('canvas').attr('width', (Math.ceil(results.notes.length/4) * 200) + 80);
+        $('canvas').attr('width', (results.notes.length * 250) + 50);
         // console.log((Math.ceil(results.notes.length/4) * 200) + 50);
         draw_piece(results.notes, results.chords);
         // draw_other_piece(results.notes, results.chords);
