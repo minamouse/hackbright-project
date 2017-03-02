@@ -57,8 +57,7 @@ def make_chords(chords, lengths):
 
     for i in range(len(chords)):
         try:
-            c = chord.Chord(chords[i])
-            c.closedPosition(forceOctave=3)
+            c = chord.Chord(chords[i]).closedPosition(forceOctave=3)
             d = duration.Duration(lengths[i])
             c.duration = d
         except PitchException:

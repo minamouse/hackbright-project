@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect, request, session, jsonify
+from helper import new_song, save_file, save_image, validate_input
 from model import User, Song, db, connect_to_db
-from helper import new_song, save_file, save_image
 import shutil
 import os
 
@@ -168,12 +168,15 @@ def song():
 
     melody = request.form.get('melody')
 
+    if not validate_input(melody):
+        return jsonify({'success': False})
+
     if 'user_id' in session:
         notes, chords = new_song(melody, session['user_id'])
     else:
         notes, chords = new_song(melody)
 
-    data = {'notes': notes, 'chords': chords}
+    data = {'notes': notes, 'chords': chords, 'success': True}
 
     return jsonify(data)
 
