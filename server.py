@@ -1,11 +1,14 @@
 from flask import Flask, render_template, redirect, request, session, jsonify
 from helper import new_song, save_file, save_image, validate_input
 from model import User, Song, db, connect_to_db
+from flask.ext.bcrypt import Bcrypt
 import shutil
 import os
 
 app = Flask(__name__)
 app.secret_key = os.environ['SECRET_KEY']
+
+bcrypt = Bcrypt(app)
 
 if not os.path.exists('static/user_files'):
     os.makedirs('static/user_files')
@@ -61,7 +64,7 @@ def signin():
     results = {}
 
     if user:
-        if user.password == password:
+        if bcrypt.check_password_hash(user.password, password):
             results['success'] = True
             session['user_id'] = user.user_id
             return jsonify(results)
@@ -87,7 +90,8 @@ def signup():
         results['message'] = message
         return jsonify(results)
 
-    user = User(username=username, password=password)
+    encrypted_pword = bcrypt.generate_password_hash(password)
+    user = User(username=username, password=encrypted_pword)
     db.session.add(user)
     db.session.flush()
 
