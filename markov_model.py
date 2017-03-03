@@ -8,6 +8,8 @@ next_notes_to_chords = pickle.load(open('next_notes_to_chords.p', 'r'))
 
 
 def get_downbeats(melody):
+    """Return the melody notes that should be used for the machine learning,
+    and the length that the chords should be."""
 
     events = []
     events.append((0.0, melody[0][1]))
@@ -38,7 +40,34 @@ def get_downbeats(melody):
     return chord_notes, chord_lengths
 
 
+def combine_lists(note_choice, chord_choice, next_note_choice):
+
+    final_list = []
+    possibilities = []
+
+    l = set(note_choice).intersection(chord_choice)
+    if l:
+        l2 = l.intersection(next_note_choice)
+        if l2:
+            possibilities = l2
+        else:
+            possibilities = l
+    else:
+        possibilities = note_choice
+
+    for p in possibilities:
+        l = [p for x in range(note_choice.count(p))]
+        l2 = [p for x in range(chord_choice.count(p))]
+        l3 = [p for x in range(next_note_choice.count(p))]
+        final_list.extend(l)
+        final_list.extend(l2)
+        final_list.extend(l3)
+
+    return final_list
+
+
 def choose_chords(raw_notes):
+    """From the list of overlapping chords, choose the chord most likely to appear."""
 
     chords = ['begin']
     notes = raw_notes + ['end']
@@ -60,13 +89,7 @@ def choose_chords(raw_notes):
         else:
             next_choice = []
 
-        choices = list(set(set(n_choice).intersection(c_choice)).intersection(next_choice))
-
-        if not choices:
-            choices = list(set(n_choice).intersection(c_choice))
-
-        if not choices:
-            choices = n_choice
+        choices = combine_lists(n_choice, c_choice, next_choice)
 
         next_chord = choice(choices)
         chords.append(next_chord)
