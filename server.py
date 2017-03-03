@@ -1,7 +1,7 @@
 from flask import Flask, render_template, redirect, request, session, jsonify
 from helper import new_song, save_file, save_image, validate_input
 from model import User, Song, db, connect_to_db
-from flask.ext.bcrypt import Bcrypt
+from flask_bcrypt import Bcrypt
 import shutil
 import os
 
@@ -115,7 +115,6 @@ def save_song():
 
     name = request.form.get('name')
     image_data = request.form.get('image')
-    print image_data
 
     song = Song(user_id=session['user_id'], name=name)
 
