@@ -44,6 +44,7 @@ def parse_melody(melody):
 
 
 def combine_notes_and_chords(notes, chords):
+    """Given two music21 part objects, combine them into a single piece."""
 
     piece = stream.Stream()
     piece.append(notes)
@@ -52,6 +53,9 @@ def combine_notes_and_chords(notes, chords):
 
 
 def make_chords(chords, lengths):
+    """Given a list of chord notes and the chord length, combine them to make
+    music21 chord objects.
+    """
 
     accomp = stream.Part()
 
@@ -70,6 +74,7 @@ def make_chords(chords, lengths):
 
 
 def get_measures(melody, accomp):
+    """Separates the music output into lists of notes by measure."""
 
     melody_measures = melody.makeMeasures()
     accomp_measures = accomp.makeMeasures()
@@ -95,8 +100,6 @@ def get_measures(melody, accomp):
 
         accomp_measure_notes.append(this_measure)
 
-    print melody_measure_notes
-    print accomp_measure_notes
     return melody_measure_notes, accomp_measure_notes
 
 
@@ -147,6 +150,7 @@ def save_file(path, filename, user_id=None):
 
 
 def save_image(path, filename, data):
+    """Saves the image to disk."""
 
     if not os.path.exists(path):
         os.makedirs(path)
@@ -162,4 +166,31 @@ def save_image(path, filename, data):
 
 def validate_input(melody):
 
+    possible_notes = ['a', 'b', 'c', 'd', 'e', 'f', 'g',
+                      'A', 'B', 'C', 'D', 'E', 'F', 'G']
+
+    for m in melody.split():
+        n, d = m.split('\\')
+        if d not in rhythms:
+            return False
+        if n[0] not in possible_notes:
+            return False
+        if n[-1] not in [str(s) for s in range(10)]:
+            return False
+        if len(n) == 3 and n[1] not in ['-', '#']:
+            return False
+
     return True
+
+
+
+
+
+
+
+
+
+
+
+
+
