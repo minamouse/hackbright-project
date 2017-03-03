@@ -105,11 +105,11 @@ var draw_piece = function (notes, chords) {
 
             var chord = new VF.StaveNote({clef: 'bass', keys: new_chords[j][0], duration: new_chords[j][2], auto_stem: true});
             for (var l = 0; l < new_chords[j][1].length; l++) {
-                console.log(new_chords[j][1][l]);
+
                 if (new_chords[j][1][l] !== '0') {
                     chord.addAccidental(l, new VF.Accidental(new_chords[j][1][l]));
                 }
-                if (new_notes[j][2][0] == 'd') {
+                if (new_chords[j][2][1] == 'd') {
                     chord.addDotToAll();
                 }
             }
@@ -171,12 +171,9 @@ $('#mel_submit').on('click', function(evt){
         var source = song_path + '?random=' + new Date().getTime();
         $('#audio').attr('src', source);
 
-        // var img_source = 'static/scores/song.svg?random=' + new Date().getTime();
-        // $('img').attr('src', img_source);
         $('canvas').attr('width', (results.notes.length * 250) + 50);
-        // console.log((Math.ceil(results.notes.length/4) * 200) + 50);
         draw_piece(results.notes, results.chords);
-        // draw_other_piece(results.notes, results.chords);
+
         // save canvas to image file
         var img = $('canvas')[0].toDataURL("image/png");
         $('canvas').attr('src', img);
@@ -257,6 +254,30 @@ rhythm_buttons.on('click', function(event) {
     $(event.target).addClass('selected_rhythm');
 });
 
-
+$(document).keypress(function(e) {
+    console.log(e.keyCode);
+    if (e.keyCode === 49){
+        rhythm_buttons.removeClass('selected_rhythm');
+        $('#whole').addClass('selected_rhythm');
+    } else if (e.keyCode === 50){
+        rhythm_buttons.removeClass('selected_rhythm');
+        $('#dotted_half').addClass('selected_rhythm');
+    } else if (e.keyCode === 51){
+        rhythm_buttons.removeClass('selected_rhythm');
+        $('#half').addClass('selected_rhythm');
+    } else if (e.keyCode === 52){
+        rhythm_buttons.removeClass('selected_rhythm');
+        $('#dotted_quarter').addClass('selected_rhythm');
+    } else if (e.keyCode === 53){
+        rhythm_buttons.removeClass('selected_rhythm');
+        $('#quarter').addClass('selected_rhythm');
+    } else if (e.keyCode === 54){
+        rhythm_buttons.removeClass('selected_rhythm');
+        $('#eighth').addClass('selected_rhythm');
+    } else if (e.keyCode === 55){
+        rhythm_buttons.removeClass('selected_rhythm');
+        $('#sixteenth').addClass('selected_rhythm');
+    }
+});
 
 
