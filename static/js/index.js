@@ -154,16 +154,10 @@ $('#stop').on('click', function() {
 });
 
 
-// $('#test_button').on('click', function() {
-//     $('html,body').animate({
-//         scrollTop: $('#test_div').offset().top},
-//         1500);
-
-// })
-
 
 $('#mel_submit').on('click', function(evt){
     evt.preventDefault();
+    $("#loading-gif").attr('hidden', false);
 
     $('.b').attr('disabled', true);
     var melody = $('#melody').val();
@@ -186,6 +180,9 @@ $('#mel_submit').on('click', function(evt){
             $('#save').attr('disabled', true);
         }
 
+        $('#music-result').attr('hidden', false);
+        $("#loading-gif").attr('hidden', true);
+        $('html, body').animate({scrollTop: $('#music-result').offset().top}, 'slow');
     });
 });
 
@@ -281,3 +278,14 @@ $(document).keypress(function(e) {
 });
 
 
+$('#restart-button').on('click', function(){
+    $('html, body').animate({scrollTop: $('#music-input').offset().top}, 'slow');
+    setTimeout(function() {$('#music-result').attr("hidden", true);}, 500);
+});
+
+$('#start-button').on('click', function(){
+    $('#music-input').attr('hidden', false);
+    $('html, body').animate({scrollTop: $('#music-input').offset().top}, 'slow');
+    setTimeout(function() {$('#landing').attr("hidden", true);}, 500);
+    $('nav').fadeIn(500);
+});

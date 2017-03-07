@@ -6,8 +6,9 @@ body {
 
 .navbar{
     border-width: 0px;
-    background-color: transparent;
+    background-color: rgba(180,180,180,0.5);
 }
+
 
 #white-keys {
     position: absolute;
@@ -100,6 +101,11 @@ body {
     text-align: center;
 }
 
+#main-title {
+    font-size: 5em;
+    font-family: 'Permanent Marker', cursive;
+}
+
 .song_card {
     display: inline-block;
     overflow: hidden;
@@ -119,6 +125,22 @@ body {
     background-color: #f58db6;
 }
 
+#start-button {
+    background-color: rgb(129,252,173);
+}
+
+#start-button:hover {
+    background-color: rgb(129, 252, 173);
+}
+
+#start-button:active {
+    background-color: rgb(129, 252, 173);
+}
+
+#start-button:focus {
+    background-color: rgb(129, 252, 173);
+}
+
 .selected_rhythm {
     background-color: rgb(129,252,173);
 }
@@ -133,4 +155,8 @@ body {
 
 .selected_rhythm:focus {
     background-color: rgb(129, 252, 173);
+}
+
+.instructions{
+    font-family: 'Permanent Marker';
 }

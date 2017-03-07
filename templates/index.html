@@ -2,283 +2,325 @@
 
 {% block body %}
 
-
-<div id="canvas_outer_div" class="col-xs-12 col-sm-10 col-sm-offset-1">
-  <div id="canvas_inner_div" class="img-rounded second_color">
-    <canvas id="score" height="230" width=""></canvas>
-  </div>
+<div id="landing" style="height: 1000px; width: 100%; text-align: center;">
+  <div style="height: 35%"></div>
+  <h1 id="main-title" class="titles accent_color">harmonize</h1>
+  <button id="start-button" class="btn btn-default second_color" style="font-size: 16px;">Start <span class="glyphicon glyphicon-chevron-right"></button> 
 </div>
 
-<div class="col-xs-8 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 text-center" style="margin-top: 10px;">
 
-    <audio id='audio' src=''></audio>
-    
-    <div class='btn-group btn-group-lg' role='group'>
-      <button class='b btn btn-default' id='play' type="button" disabled>
-        <span class="glyphicon glyphicon-play"></span>
-      </button>
-      <button class='b btn btn-default' id='pause' type="button" disabled>
-        <span class="glyphicon glyphicon-pause"></span>
-      </button>
-      <button class='b btn btn-default' id='stop' type="button" disabled>
-        <span class="glyphicon glyphicon-stop"></span>
-      </button>
-      <button data-toggle="modal" data-target="#name_song" class='b btn btn-default' id='save' type="button" disabled>
-      <span class="glyphicon glyphicon-floppy-disk"></span>
-    </button>
-    <button class='btn btn-default' id='saved' type="button" style="display: none;" disabled>
-      <span class="glyphicon glyphicon-floppy-saved"></span>
-    </button>
-    <a class='b btn btn-default' id='download' href={{ song_path }} download disabled>
-      <span class="glyphicon glyphicon-download-alt"></span>
-    </a>
-    </div>
-
-
-
-</div>
-<br>
-<div class='col-xs-10 col-xs-offset-1' style="padding-top: 50px;">
-  <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
-    <input type='text' name='text' id='melody' class='form-control'>
-  </div>
-  <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
-    <button class="btn btn-md btn-block accent_button" id='mel_submit' type="submit">Submit</button>
-  </div>
-
-  <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
-    <button class="btn btn-md btn-default btn-block" id='clear_text' type="submit">Clear</button>
-  </div>
-</div>
-<br>
-
-<center>
-  <div class="col-xs-12" style="padding-top: 50px;">
-    <div class="btn-group">
-      <button class="btn btn-md btn-default rhythms" id='whole' value='w'>whole</button>
-      <button class="btn btn-md btn-default rhythms" id='dotted_half' value='.h'>dotted half</button>
-      <button class="btn btn-md btn-default rhythms" id='half' value='h'>half</button>
-      <button class="btn btn-md btn-default rhythms" id="dotted_quarter" value='.q'>dotted quarter</button>
-      <button class="btn btn-md btn-default rhythms selected_rhythm" id="quarter" value='q'>quarter</button>
-      <button class="btn btn-md btn-default rhythms" id="eighth" value='8'>eighth</button>
-      <button class="btn btn-md btn-default rhythms" id="sixteenth" value='16'>sixteenth</button>
-    </div>
-  </div>
-</center>
-
-<div id="keyboard" class="col-xs-12">
+<!-- <div style="position: absolute; z-index: 1000;">
   <center>
-  <div id="inner_keyboard" class="img-rounded">
-    <div id="white-keys">
+    <img id="loading-gif" src="static/images/ajax-loader.gif" hidden/>
+  </center>
+</div> -->
 
-      <div class="img-rounded">
-        <audio src="static/sounds/C3.wav"></audio>
-      </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/D3.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/E3.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/F3.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/G3.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/A3.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/B3.wav"></audio>
-     </div><!-- 
-   
-
-
-
-     --><div class="img-rounded">
-        <audio src="static/sounds/C4.wav"></audio>
-      </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/D4.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/E4.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/F4.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/G4.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/A4.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/B4.wav"></audio>
-     </div><!-- 
-   
-
-
-
-     --><div class="img-rounded">
-        <audio src="static/sounds/C5.wav"></audio>
-      </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/D5.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/E5.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/F5.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/G5.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/A5.wav"></audio>
-     </div><!-- 
-   
-     --><div class="img-rounded">
-      <audio src="static/sounds/B5.wav"></audio>
-     </div>
-
+<div id="music-input" style="height: 1000px; width: 100% position: absolute;" hidden>
+  <div style="height: 20%"></div>
+  <div class="col-xs-12 col-sm-4 instructions">
+    <div class="col-xs-3">
+      <h1>1.</h1>
     </div>
-    <div id="black-keys">
+    <div class="col-xs-9">
+      <br>
+      <p>Select a rhythm before playing a note!</p>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-4 instructions">
+    <div class="col-xs-3">
+      <h1>2.</h1>
+    </div>
+    <div class="col-xs-9">
+      <br>
+      <p>Edit your melody in the text field below!</p>
+    </div>
+  </div>
+  <div class="col-xs-12 col-sm-4 instructions">
+    <div class="col-xs-3">
+      <h1>3.</h1>
+    </div>
+    <div class="col-xs-9">
+      <br>
 
+      <p>Submit it to have it harmonized!</p>
+    </div>
+  </div>
+  <center>
+    <div class="col-xs-12" style="padding-top: 50px;">
+      <div class="btn-group">
+        <button class="btn btn-md btn-default rhythms" id='whole' value='w'>whole</button>
+        <button class="btn btn-md btn-default rhythms" id='dotted_half' value='.h'>dotted half</button>
+        <button class="btn btn-md btn-default rhythms" id='half' value='h'>half</button>
+        <button class="btn btn-md btn-default rhythms" id="dotted_quarter" value='.q'>dotted quarter</button>
+        <button class="btn btn-md btn-default rhythms selected_rhythm" id="quarter" value='q'>quarter</button>
+        <button class="btn btn-md btn-default rhythms" id="eighth" value='8'>eighth</button>
+        <button class="btn btn-md btn-default rhythms" id="sixteenth" value='16'>sixteenth</button>
+      </div>
+    </div>
+  </center>
+  <div id="keyboard" class="col-xs-12">
+    <center>
+    <div id="inner_keyboard" class="img-rounded">
+      <div id="white-keys">
 
-
-      <div class="img-rounded" id="first">
-        <audio src="static/sounds/Cs3.wav"></audio>
-      </div><!-- 
+        <div class="img-rounded">
+          <audio src="static/sounds/C3.wav"></audio>
+        </div><!-- 
      
        --><div class="img-rounded">
-        <audio src="static/sounds/Ds3.wav"></audio>
-      </div><!--
-   
-
-
-
-       --><div class="img-rounded invisible"></div><!-- 
-   
-
-
-
-       --><div class="img-rounded">
-        <audio src="static/sounds/Fs3.wav"></audio>
-      </div><!-- 
-  
-       --><div class="img-rounded">
-        <audio src="static/sounds/Gs3.wav"></audio>
-      </div><!-- 
-
-       --><div class="img-rounded">
-        <audio src="static/sounds/As3.wav"></audio>
-      </div><!--
-  
-
-
-
-       --><div class="img-rounded invisible"></div><!-- 
-  
-
-
-
-       --><div class="img-rounded">
-        <audio src="static/sounds/Cs4.wav"></audio>
-      </div><!-- 
-  
-       --><div class="img-rounded">
-        <audio src="static/sounds/Ds4.wav"></audio>
-      </div><!-- 
-   
-
-
-
-       --><div class="img-rounded invisible"></div><!--
-    
-
-
-
-       --><div class="img-rounded">
-        <audio src="static/sounds/Fs4.wav"></audio>
-      </div><!-- 
- 
-       --><div class="img-rounded">
-        <audio src="static/sounds/Gs4.wav"></audio>
-      </div><!-- 
-    
-       --><div class="img-rounded">
-       <audio src="static/sounds/As4.wav"></audio>
+        <audio src="static/sounds/D3.wav"></audio>
        </div><!-- 
-  
-
-
-
-       --><div class="img-rounded invisible"></div><!-- 
-   
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/E3.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/F3.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/G3.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/A3.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/B3.wav"></audio>
+       </div><!-- 
+     
 
 
 
        --><div class="img-rounded">
-        <audio src="static/sounds/Cs5.wav"></audio>
-      </div><!-- 
-  
+          <audio src="static/sounds/C4.wav"></audio>
+        </div><!-- 
+     
        --><div class="img-rounded">
-        <audio src="static/sounds/Ds5.wav"></audio>
-      </div><!-- 
-   
-
-
-
-       --><div class="img-rounded invisible"></div><!--
-    
+        <audio src="static/sounds/D4.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/E4.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/F4.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/G4.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/A4.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/B4.wav"></audio>
+       </div><!-- 
+     
 
 
 
        --><div class="img-rounded">
-        <audio src="static/sounds/Fs5.wav"></audio>
-      </div><!-- 
- 
+          <audio src="static/sounds/C5.wav"></audio>
+        </div><!-- 
+     
        --><div class="img-rounded">
-        <audio src="static/sounds/Gs5.wav"></audio>
-      </div><!-- 
-    
-       --><div class="img-rounded" id="last">
-       <audio src="static/sounds/As5.wav"></audio>
+        <audio src="static/sounds/D5.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/E5.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/F5.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/G5.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/A5.wav"></audio>
+       </div><!-- 
+     
+       --><div class="img-rounded">
+        <audio src="static/sounds/B5.wav"></audio>
        </div>
 
+      </div>
+      <div id="black-keys">
+
+
+
+        <div class="img-rounded" id="first">
+          <audio src="static/sounds/Cs3.wav"></audio>
+        </div><!-- 
+       
+         --><div class="img-rounded">
+          <audio src="static/sounds/Ds3.wav"></audio>
+        </div><!--
+     
+
+
+
+         --><div class="img-rounded invisible"></div><!-- 
+     
+
+
+
+         --><div class="img-rounded">
+          <audio src="static/sounds/Fs3.wav"></audio>
+        </div><!-- 
+    
+         --><div class="img-rounded">
+          <audio src="static/sounds/Gs3.wav"></audio>
+        </div><!-- 
+
+         --><div class="img-rounded">
+          <audio src="static/sounds/As3.wav"></audio>
+        </div><!--
+    
+
+
+
+         --><div class="img-rounded invisible"></div><!-- 
+    
+
+
+
+         --><div class="img-rounded">
+          <audio src="static/sounds/Cs4.wav"></audio>
+        </div><!-- 
+    
+         --><div class="img-rounded">
+          <audio src="static/sounds/Ds4.wav"></audio>
+        </div><!-- 
+     
+
+
+
+         --><div class="img-rounded invisible"></div><!--
+      
+
+
+
+         --><div class="img-rounded">
+          <audio src="static/sounds/Fs4.wav"></audio>
+        </div><!-- 
+   
+         --><div class="img-rounded">
+          <audio src="static/sounds/Gs4.wav"></audio>
+        </div><!-- 
+      
+         --><div class="img-rounded">
+         <audio src="static/sounds/As4.wav"></audio>
+         </div><!-- 
+    
+
+
+
+         --><div class="img-rounded invisible"></div><!-- 
+     
+
+
+
+         --><div class="img-rounded">
+          <audio src="static/sounds/Cs5.wav"></audio>
+        </div><!-- 
+    
+         --><div class="img-rounded">
+          <audio src="static/sounds/Ds5.wav"></audio>
+        </div><!-- 
+     
+
+
+
+         --><div class="img-rounded invisible"></div><!--
+      
+
+
+
+         --><div class="img-rounded">
+          <audio src="static/sounds/Fs5.wav"></audio>
+        </div><!-- 
+   
+         --><div class="img-rounded">
+          <audio src="static/sounds/Gs5.wav"></audio>
+        </div><!-- 
+      
+         --><div class="img-rounded" id="last">
+         <audio src="static/sounds/As5.wav"></audio>
+         </div>
 
 
 
 
 
+
+      </div>
+    </div>
+  </center>
+  </div>
+  <div class='col-xs-10 col-xs-offset-1' style="padding-top: 50px;">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
+      <input type='text' name='text' id='melody' class='form-control'>
+    </div>
+    <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
+      <button class="btn btn-md btn-block accent_button" id='mel_submit' type="submit">Submit</button>
+    </div>
+
+    <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
+      <button class="btn btn-md btn-default btn-block" id='clear_text' type="submit">Clear</button>
     </div>
   </div>
-</center>
+  <br>
 </div>
 
+<div id="music-result" style="height: 900px; width: 100%" hidden>
+  <div style="height: 20%;"></div>
+  <div id="canvas_outer_div" class="col-xs-12 col-sm-10 col-sm-offset-1">
+    <div id="canvas_inner_div" class="img-rounded second_color">
+      <canvas id="score" height="230" width=""></canvas>
+    </div>
+  </div>
 
+  <div id="audio-controls" class="col-xs-8 col-sm-6 col-sm-offset-3 col-md-4 col-md-offset-4 col-lg-4 col-lg-offset-4 text-center" style="margin-top: 10px;">
 
+      <audio id='audio' src=''></audio>
+      
+      <div class='btn-group btn-group-lg' role='group'>
+        <button class='b btn btn-default' id='play' type="button" disabled>
+          <span class="glyphicon glyphicon-play"></span>
+        </button>
+        <button class='b btn btn-default' id='pause' type="button" disabled>
+          <span class="glyphicon glyphicon-pause"></span>
+        </button>
+        <button class='b btn btn-default' id='stop' type="button" disabled>
+          <span class="glyphicon glyphicon-stop"></span>
+        </button>
+        <button data-toggle="modal" data-target="#name_song" class='b btn btn-default' id='save' type="button" disabled>
+        <span class="glyphicon glyphicon-floppy-disk"></span>
+      </button>
+      <button class='btn btn-default' id='saved' type="button" style="display: none;" disabled>
+        <span class="glyphicon glyphicon-floppy-saved"></span>
+      </button>
+      <a class='b btn btn-default' id='download' href={{ song_path }} download disabled>
+        <span class="glyphicon glyphicon-download-alt"></span>
+      </a>
+      </div>
 
+  </div>
+  <div class="col-xs-12" style="text-align: center;">
+    <button id="restart-button" class="btn btn-default accent_button"><span class="glyphicon glyphicon-repeat" style="font-size: 30px;"></span></button>
+  </div>
+
+</div>
   <!-- Modal -->
   <div class="modal fade" id="name_song" role="dialog">
     <div class="modal-dialog">

@@ -1,6 +1,7 @@
 "use strict";
 
 var delete_song;
+$('nav').attr('hidden', false);
 
 $('.play').on('click', function(event) {
     var song_id = event.target.parentNode.id;

@@ -84,7 +84,7 @@ def dataframe_to_features(df):
 if __name__ == '__main__':
 
     paths = corpus.getComposer('bach')[:-20]
-    for path in paths[:20]:
+    for path in paths[:100]:
         print '***Parsing', path[94:] + '***'
 
         # strip off the extra folder names in the path name
