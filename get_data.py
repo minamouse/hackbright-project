@@ -84,12 +84,15 @@ def dataframe_to_features(df):
 if __name__ == '__main__':
 
     paths = corpus.getComposer('bach')[:-20]
-    for path in paths[:100]:
-        print '***Parsing', path[94:] + '***'
+    for path in paths:
 
         # strip off the extra folder names in the path name
-        df = parse_song(path[94:])
+        pathname = path[82:]
+        print '***Parsing', pathname + '***'
+
+        df = parse_song(pathname)
         if df is not None:
+            print '>>>'
             dataframe_to_features(df)
 
     pickle.dump(notes_to_chords, open('notes_to_chords.p', 'w'))

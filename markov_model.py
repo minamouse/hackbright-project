@@ -2,9 +2,9 @@ from random import choice
 import pickle
 
 
-notes_to_chords = pickle.load(open('notes_to_chords.p', 'r'))
-chords_to_chords = pickle.load(open('chords_to_chords.p', 'r'))
-next_notes_to_chords = pickle.load(open('next_notes_to_chords.p', 'r'))
+notes_to_chords = pickle.load(open('data/notes_to_chords.p', 'r'))
+chords_to_chords = pickle.load(open('data/chords_to_chords.p', 'r'))
+next_notes_to_chords = pickle.load(open('data/next_notes_to_chords.p', 'r'))
 
 
 def get_downbeats(melody):
