@@ -157,7 +157,7 @@ $('#stop').on('click', function() {
 
 $('#mel_submit').on('click', function(evt){
     evt.preventDefault();
-    $("#loading-gif").attr('hidden', false);
+    // $("#loading-gif").attr('hidden', false);
 
     $('.b').attr('disabled', true);
     var melody = $('#melody').val();
@@ -183,6 +183,7 @@ $('#mel_submit').on('click', function(evt){
         $('#music-result').attr('hidden', false);
         $("#loading-gif").attr('hidden', true);
         $('html, body').animate({scrollTop: $('#music-result').offset().top}, 'slow');
+        $('#melody').val('');
     });
 });
 
@@ -289,3 +290,4 @@ $('#start-button').on('click', function(){
     setTimeout(function() {$('#landing').attr("hidden", true);}, 500);
     $('nav').fadeIn(500);
 });
+

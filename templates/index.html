@@ -2,12 +2,12 @@
 
 {% block body %}
 
-<div id="landing" style="height: 1000px; width: 100%; text-align: center;">
-  <div style="height: 35%"></div>
+
+<div id="landing">
+  <div style="height: 30%;"></div>
   <h1 id="main-title" class="titles accent_color">harmonize</h1>
   <button id="start-button" class="btn btn-default second_color" style="font-size: 16px;">Start <span class="glyphicon glyphicon-chevron-right"></button> 
 </div>
-
 
 <!-- <div style="position: absolute; z-index: 1000;">
   <center>
@@ -15,15 +15,15 @@
   </center>
 </div> -->
 
-<div id="music-input" style="height: 1000px; width: 100% position: absolute;" hidden>
-  <div style="height: 20%"></div>
+<div id="music-input" style="height: 800px; width: 100% position: absolute;" hidden>
+  <div style="height: 15%"></div>
   <div class="col-xs-12 col-sm-4 instructions">
     <div class="col-xs-3">
       <h1>1.</h1>
     </div>
     <div class="col-xs-9">
       <br>
-      <p>Select a rhythm before playing a note!</p>
+      <p>Select a rhythm, then play a note on the keyboard!</p>
     </div>
   </div>
   <div class="col-xs-12 col-sm-4 instructions">
@@ -32,7 +32,7 @@
     </div>
     <div class="col-xs-9">
       <br>
-      <p>Edit your melody in the text field below!</p>
+      <p>If you make a mistake, edit your melody in the text field below!</p>
     </div>
   </div>
   <div class="col-xs-12 col-sm-4 instructions">
@@ -42,9 +42,22 @@
     <div class="col-xs-9">
       <br>
 
-      <p>Submit it to have it harmonized!</p>
+      <p>Submit it to have it <span class='accent_color'>harmonized</span>!</p>
     </div>
   </div>
+    <div class='col-xs-10 col-xs-offset-1' style="padding-top: 50px;">
+    <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
+      <input type='text' name='text' id='melody' class='form-control'>
+    </div>
+    <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
+      <button class="btn btn-md btn-block accent_button" id='mel_submit' type="submit">Submit</button>
+    </div>
+
+    <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
+      <button class="btn btn-md btn-default btn-block" id='clear_text' type="submit">Clear</button>
+    </div>
+  </div>
+  <br>
   <center>
     <div class="col-xs-12" style="padding-top: 50px;">
       <div class="btn-group">
@@ -258,33 +271,18 @@
          <audio src="static/sounds/As5.wav"></audio>
          </div>
 
-
-
-
-
-
       </div>
     </div>
   </center>
   </div>
-  <div class='col-xs-10 col-xs-offset-1' style="padding-top: 50px;">
-    <div class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-1">
-      <input type='text' name='text' id='melody' class='form-control'>
-    </div>
-    <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
-      <button class="btn btn-md btn-block accent_button" id='mel_submit' type="submit">Submit</button>
-    </div>
 
-    <div class="col-xs-10 col-xs-offset-1 col-sm-2 col-sm-offset-0">
-      <button class="btn btn-md btn-default btn-block" id='clear_text' type="submit">Clear</button>
-    </div>
-  </div>
-  <br>
 </div>
 
-<div id="music-result" style="height: 900px; width: 100%" hidden>
-  <div style="height: 20%;"></div>
+<div id="music-result" style="height: 800px; width: 100%" hidden>
+  <div style="height: 10%;"></div>
   <div id="canvas_outer_div" class="col-xs-12 col-sm-10 col-sm-offset-1">
+    <h1 class="titles" style="font-family: 'Permanent Marker';">your new song:</h1>
+    <br>
     <div id="canvas_inner_div" class="img-rounded second_color">
       <canvas id="score" height="230" width=""></canvas>
     </div>
@@ -317,7 +315,8 @@
 
   </div>
   <div class="col-xs-12" style="text-align: center;">
-    <button id="restart-button" class="btn btn-default accent_button"><span class="glyphicon glyphicon-repeat" style="font-size: 30px;"></span></button>
+    <div style="height: 100px;"></div>
+    <button id="restart-button" class="btn btn-lg accent_button">Try another song!</button>
   </div>
 
 </div>
