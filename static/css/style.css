@@ -1,7 +1,7 @@
 body {
-/*    background-size: 100%;
-*/    background-image: url('../images/dimension.png');
+    background-image: url('../images/dimension.png');
     background-attachment: fixed;
+    display: block;
 }
 
 .navbar{
@@ -125,6 +125,19 @@ body {
     background-color: #f58db6;
 }
 
+.accent_button:hover {
+    background-color: #f58db6;
+}
+
+.accent_button:active {
+    background-color: #f58db6;
+}
+
+.accent_button:focus {
+    background-color: #f58db6;
+}
+
+
 #start-button {
     background-color: rgb(129,252,173);
 }
@@ -159,4 +172,10 @@ body {
 
 .instructions{
     font-family: 'Permanent Marker';
+    font-size: medium;
+}
+
+#landing {
+    text-align: center;
+    height: 800px;
 }
