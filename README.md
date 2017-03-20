@@ -5,14 +5,16 @@ Harmonize is a web app that generates an accompaniment to any melody you play. I
 
 ### Installation
 
-install postgresql
-clone the repo
-virtualenv venv
-source venv/bin/activate
-pip install -r requirements.txt
-sudo apt install timidity
-export SECRET_KEY='key'
-dropdb project
-createdb project
-python model.py
-python server.py
+```
+$ install postgresql
+$ clone the repo
+$ virtualenv venv
+$ source venv/bin/activate
+$ pip install -r requirements.txt
+$ sudo apt install timidity
+$ export SECRET_KEY='key'
+$ dropdb project
+$ createdb project
+$ python model.py
+$ python server.py
+```
